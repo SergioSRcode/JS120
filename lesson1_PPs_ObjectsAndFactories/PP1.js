@@ -27,12 +27,12 @@ let createBook = (title, author) => {
   return {
     title: title,
     author: author,
-    
+
     getDescription() {
-      return `${this.title} was written by ${this.author}.`
+      return `${this.title} was written by ${this.author}.`;
     }
   };
-}
+};
 
 let book1 = createBook("Mythos", "Stephen Fry");
 let book2 = createBook("Me Talk Pretty One Day", "David Sedaris");
