@@ -23,10 +23,21 @@ Attributes
    Get Description
 */
 
+// let createBook = (title, author) => {
+//   return {
+//     title: title,
+//     author: author,
+
+//     getDescription() {
+//       return `${this.title} was written by ${this.author}.`;
+//     }
+//   };
+// };
+
 let createBook = (title, author) => {
   return {
-    title: title,
-    author: author,
+    title,  // same as `title: title,`
+    author,  // same as `author: author,`
 
     getDescription() {
       return `${this.title} was written by ${this.author}.`;
