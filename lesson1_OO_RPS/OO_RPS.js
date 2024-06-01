@@ -83,7 +83,7 @@ let compare = function(move1, move2) {
   // not yet implemented
 };
 
-const RPSGAME = {
+const RPSGame = {
   human: createPlayer("human"),
   computer: createPlayer("computer"),
 
@@ -95,11 +95,16 @@ const RPSGAME = {
     console.log("Thank you for playing Rock, Paper, Scissors. Goodbye!");
   },
 
+  displayWinner() {
+    console.log(`You chose: ${this.human.move}`);
+    console.log(`The computer chose: ${this.computer.move}`);
+  },
+
   play() {
     this.displayWelcomeMessage();
     this.human.choose();
     this.computer.choose();
-    displayWinner();
+    this.displayWinner();
     this.displayGoodByeMessage();
   },
 };
