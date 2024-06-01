@@ -63,12 +63,20 @@ const RPSGAME = {
   human: createPlayer(),
   computer: createPlayer(),
 
+  displayWelcomeMessage() {
+    console.log("Welcome to Rock, Paper, Scissors!");
+  },
+
+  displayGoodByeMessage() {
+    console.log("Thank you for playing Rock, Paper, Scissors. Goodbye!");
+  },
+
   play() {
-    displayWelcomeMessage();
+    this.displayWelcomeMessage();
     this.human.choose();
     this.computer.choose();
     displayWinner();
-    displayGoodByeMessage();
+    this.displayGoodByeMessage();
   },
 };
 
