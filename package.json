@@ -5,6 +5,7 @@
     "eslint-cli": "^1.1.1"
   },
   "dependencies": {
+    "readline-sync": "^1.4.10",
     "rl-sync": "^1.0.2"
   }
 }
