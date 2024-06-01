@@ -29,13 +29,24 @@ Rule
 
 */
 
-function createPlayer() {
+function createPlayer(playerType) {
   return {
     // possible state: player name?
-    // possible state: player's current move
+    playerType,
+    move: null,
 
     choose() {
-      // not yet implemented
+      if (this.isHuman()) {
+        // follows
+      } else {
+        const CHOICES = ["rock", "paper", "scissors"];
+        let randomIdx = Math.floor(Math.random() * CHOICES.length);
+        this.move = CHOICES[randomIdx];
+      }
+    },
+
+    isHuman() {
+      return this.playerType === "human";
     },
   };
 }
@@ -60,8 +71,8 @@ let compare = function(move1, move2) {
 };
 
 const RPSGAME = {
-  human: createPlayer(),
-  computer: createPlayer(),
+  human: createPlayer("human"),
+  computer: createPlayer("computer"),
 
   displayWelcomeMessage() {
     console.log("Welcome to Rock, Paper, Scissors!");
