@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /*
 Step 1: Write a textual description of the problem or exercise.
 
@@ -29,6 +30,8 @@ Rule
 
 */
 
+const READLINE = require("readline-sync");
+
 function createPlayer(playerType) {
   return {
     // possible state: player name?
@@ -37,7 +40,17 @@ function createPlayer(playerType) {
 
     choose() {
       if (this.isHuman()) {
-        // follows
+        let choice;
+
+        while (true) {
+          console.log("Please choose rock, paper, or scissors:");
+          choice = READLINE.question();
+
+          if (["rock", "paper", "scissors"].includes(choice)) break;
+          console.log("Sorry, invalid choice.");
+        }
+
+        this.move = choice;
       } else {
         const CHOICES = ["rock", "paper", "scissors"];
         let randomIdx = Math.floor(Math.random() * CHOICES.length);
