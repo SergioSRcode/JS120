@@ -30,7 +30,7 @@ Rule
 
 */
 
-const READLINE = require("readline-sync");
+const readline = require("readline-sync");
 
 function createPlayer(playerType) {
   return {
@@ -44,7 +44,7 @@ function createPlayer(playerType) {
 
         while (true) {
           console.log("Please choose rock, paper, or scissors:");
-          choice = READLINE.question();
+          choice = readline.question();
 
           if (["rock", "paper", "scissors"].includes(choice)) break;
           console.log("Sorry, invalid choice.");
