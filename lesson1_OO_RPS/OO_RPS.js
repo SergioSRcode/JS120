@@ -34,7 +34,6 @@ const readline = require("readline-sync");
 
 function createPlayer(playerType) {
   return {
-    // possible state: player name?
     playerType,
     move: null,
 
@@ -64,24 +63,24 @@ function createPlayer(playerType) {
   };
 }
 
-function createMove() {
-  return {
-    // possible state: rock, paper, scissors
-  };
-}
+// function createMove() {
+//   return {
+//     // possible state: rock, paper, scissors
+//   };
+// }
 
-function createRule() {
-  return {
-    // possible state: not clear if rules need state
-  };
-}
+// function createRule() {
+//   return {
+//     // possible state: not clear if rules need state
+//   };
+// }
 
 // Since we don't yet know where to put `compare`, let's define
 // it as an ordinary function.
 
-let compare = function(move1, move2) {
-  // not yet implemented
-};
+// let compare = function(move1, move2) {
+//   // not yet implemented
+// };
 
 const RPSGame = {
   human: createPlayer("human"),
@@ -115,11 +114,27 @@ const RPSGame = {
     }
   },
 
+  playAgain() {
+    const VIABLE_INPUTS = ["y", "yes", "n", "no"];
+
+    console.log("What a great game! Play again?");
+    let userChoice = readline.question().toLowerCase();
+
+    while (!VIABLE_INPUTS.includes(userChoice)) {
+      console.log("I couldn't hear you! Do you want to play again?");
+      userChoice = readline.question().toLowerCase();
+    }
+
+    return userChoice === "y" || userChoice === "yes";
+  },
+
   play() {
     this.displayWelcomeMessage();
-    this.human.choose();
-    this.computer.choose();
-    this.displayWinner();
+    do {
+      this.human.choose();
+      this.computer.choose();
+      this.displayWinner();
+    } while (this.playAgain());
     this.displayGoodByeMessage();
   },
 };
