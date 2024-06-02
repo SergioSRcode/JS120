@@ -32,6 +32,12 @@ Rule
 
 const readline = require("readline-sync");
 
+function createPlayer() {
+  return {
+    move: null,
+  };
+}
+
 function createComputer() {
   return {
     move: null,
@@ -45,9 +51,9 @@ function createComputer() {
 }
 
 function createHuman() {
-  return {
-    move: null,
+  let playerObject = createPlayer();
 
+  let humanObject = {
     choose() {
       let choice;
 
@@ -62,38 +68,10 @@ function createHuman() {
       this.move = choice;
     },
   };
+
+  return Object.assign(playerObject, humanObject);
 }
 
-// function createPlayer(playerType) {
-//   return {
-//     playerType,
-//     move: null,
-
-//     choose() {
-//       if (this.isHuman()) {
-//         let choice;
-
-//         while (true) {
-//           console.log("Please choose rock, paper, or scissors:");
-//           choice = readline.question();
-
-//           if (["rock", "paper", "scissors"].includes(choice)) break;
-//           console.log("Sorry, invalid choice.");
-//         }
-
-//         this.move = choice;
-//       } else {
-//         const CHOICES = ["rock", "paper", "scissors"];
-//         let randomIdx = Math.floor(Math.random() * CHOICES.length);
-//         this.move = CHOICES[randomIdx];
-//       }
-//     },
-
-//     isHuman() {
-//       return this.playerType === "human";
-//     },
-//   };
-// }
 
 // function createMove() {
 //   return {
