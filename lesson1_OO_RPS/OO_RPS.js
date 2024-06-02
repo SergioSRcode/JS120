@@ -32,36 +32,68 @@ Rule
 
 const readline = require("readline-sync");
 
-function createPlayer(playerType) {
+function createComputer() {
   return {
-    playerType,
     move: null,
 
     choose() {
-      if (this.isHuman()) {
-        let choice;
-
-        while (true) {
-          console.log("Please choose rock, paper, or scissors:");
-          choice = readline.question();
-
-          if (["rock", "paper", "scissors"].includes(choice)) break;
-          console.log("Sorry, invalid choice.");
-        }
-
-        this.move = choice;
-      } else {
-        const CHOICES = ["rock", "paper", "scissors"];
-        let randomIdx = Math.floor(Math.random() * CHOICES.length);
-        this.move = CHOICES[randomIdx];
-      }
-    },
-
-    isHuman() {
-      return this.playerType === "human";
+      const CHOICES = ["rock", "paper", "scissors"];
+      let randomIdx = Math.floor(Math.random() * CHOICES.length);
+      this.move = CHOICES[randomIdx];
     },
   };
 }
+
+function createHuman() {
+  return {
+    move: null,
+
+    choose() {
+      let choice;
+
+      while (true) {
+        console.log("Please choose rock, paper, or scissors:");
+        choice = readline.question();
+
+        if (["rock", "paper", "scissors"].includes(choice)) break;
+        console.log("Sorry, invalid choice.");
+      }
+
+      this.move = choice;
+    },
+  };
+}
+
+// function createPlayer(playerType) {
+//   return {
+//     playerType,
+//     move: null,
+
+//     choose() {
+//       if (this.isHuman()) {
+//         let choice;
+
+//         while (true) {
+//           console.log("Please choose rock, paper, or scissors:");
+//           choice = readline.question();
+
+//           if (["rock", "paper", "scissors"].includes(choice)) break;
+//           console.log("Sorry, invalid choice.");
+//         }
+
+//         this.move = choice;
+//       } else {
+//         const CHOICES = ["rock", "paper", "scissors"];
+//         let randomIdx = Math.floor(Math.random() * CHOICES.length);
+//         this.move = CHOICES[randomIdx];
+//       }
+//     },
+
+//     isHuman() {
+//       return this.playerType === "human";
+//     },
+//   };
+// }
 
 // function createMove() {
 //   return {
@@ -83,8 +115,8 @@ function createPlayer(playerType) {
 // };
 
 const RPSGame = {
-  human: createPlayer("human"),
-  computer: createPlayer("computer"),
+  human: createHuman(),
+  computer: createComputer(),
 
   displayWelcomeMessage() {
     console.log("Welcome to Rock, Paper, Scissors!");
