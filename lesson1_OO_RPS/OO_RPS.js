@@ -39,15 +39,17 @@ function createPlayer() {
 }
 
 function createComputer() {
-  return {
-    move: null,
+  let playerObject = createPlayer();
 
+  let computerObject = {
     choose() {
       const CHOICES = ["rock", "paper", "scissors"];
       let randomIdx = Math.floor(Math.random() * CHOICES.length);
       this.move = CHOICES[randomIdx];
     },
   };
+
+  return Object.assign(playerObject, computerObject);
 }
 
 function createHuman() {
