@@ -35,7 +35,7 @@ const readline = require("readline-sync");
 
 function print(text) {
   console.log(`==>  ${text}`);
-  console.log();
+  // console.log();
 }
 
 function createPlayer() {
@@ -196,6 +196,7 @@ const RPSGame = {
     console.clear();
     this.displayWelcomeMessage();
     do {
+      this.score.reset();
       while (!this.score.reachedWinningScore()) {
         this.human.choose();
         this.computer.choose();
