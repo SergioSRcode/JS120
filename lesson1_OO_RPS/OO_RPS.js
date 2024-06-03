@@ -85,7 +85,6 @@ function createScore() {
     human: 0,
     computer: 0,
     winningScore: 3,
-    // incrementValue: 1,
 
     reset() {
       this.human = 0;
@@ -96,13 +95,6 @@ function createScore() {
       return this.human === this.winningScore || this.computer === this.winningScore;
     },
 
-    // incrementHuman() {
-    //   this.human += this.incrementValue;
-    // },
-
-    // incrementComputer() {
-    //   this.computer += this.incrementValue;
-    // },
     display() {
       console.log(`You: ${this.human} | Computer: ${this.computer}`);
     },
@@ -145,12 +137,12 @@ const RPSGame = {
   },
 
   displayWelcomeMessage() {
-    print("Welcome to Rock, Paper, Scissors!");
+    console.log("*** Welcome to Rock, Paper, Scissors! ***");
   },
 
   displayGoodByeMessage() {
     console.clear();
-    print("Thank you for playing Rock, Paper, Scissors. Goodbye!");
+    console.log("*** Thank you for playing Rock, Paper, Scissors. Goodbye! ***");
   },
 
   calculateWinner() {
@@ -177,6 +169,15 @@ const RPSGame = {
     }
   },
 
+  continueToNextRound() {
+    if (!this.score.reachedWinningScore()) {
+      console.log();
+      print("Press Enter to continue to the next round");
+      readline.question();
+      console.clear();
+    }
+  },
+
   playAgain() {
     const VIABLE_INPUTS = ["y", "yes", "n", "no"];
 
@@ -198,11 +199,14 @@ const RPSGame = {
     do {
       this.score.reset();
       while (!this.score.reachedWinningScore()) {
+        this.score.display();
         this.human.choose();
         this.computer.choose();
         this.calculateWinner();
-        this.displayWinner();
+        console.clear();
         this.score.display();
+        this.displayWinner();
+        this.continueToNextRound();
       }
     } while (this.playAgain());
     this.displayGoodByeMessage();
