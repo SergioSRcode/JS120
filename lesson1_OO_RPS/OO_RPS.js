@@ -32,6 +32,11 @@ Rule
 
 const readline = require("readline-sync");
 
+function print(text) {
+  console.log(`==>  ${text}`);
+  console.log();
+}
+
 function createPlayer() {
   return {
     move: null,
@@ -60,7 +65,7 @@ function createHuman() {
       let choice;
 
       while (true) {
-        console.log("Please choose rock, paper, or scissors:");
+        print("Please choose rock, paper, or scissors:");
         choice = readline.question();
 
         if (["rock", "paper", "scissors"].includes(choice)) break;
@@ -106,38 +111,38 @@ const RPSGame = {
   },
 
   displayWelcomeMessage() {
-    console.log("Welcome to Rock, Paper, Scissors!");
+    print("Welcome to Rock, Paper, Scissors!");
   },
 
   displayGoodByeMessage() {
     console.clear();
-    console.log("Thank you for playing Rock, Paper, Scissors. Goodbye!");
+    print("Thank you for playing Rock, Paper, Scissors. Goodbye!");
   },
 
   displayWinner() {
     let humanMove = this.human.move;
     let computerMove = this.computer.move;
 
-    console.log(`You chose: ${humanMove}`);
-    console.log(`The computer chose: ${computerMove}`);
+    print(`You chose: ${humanMove}`);
+    print(`The computer chose: ${computerMove}`);
 
     if (this.winningCombos[humanMove].includes(computerMove)) {
-      console.log("You win!");
+      print("You win!");
     } else if (this.winningCombos[computerMove].includes(humanMove)) {
-      console.log("Aww, computer won!");
+      print("Aww, computer won!");
     } else {
-      console.log("It's a tie");
+      print("It's a tie");
     }
   },
 
   playAgain() {
     const VIABLE_INPUTS = ["y", "yes", "n", "no"];
 
-    console.log("What a great game! Play again?");
+    print("What a great game! Play again?");
     let userChoice = readline.question().toLowerCase();
 
     while (!VIABLE_INPUTS.includes(userChoice)) {
-      console.log("I couldn't hear you! Do you want to play again?");
+      print("I couldn't hear you! Do you want to play again?");
       userChoice = readline.question().toLowerCase();
     }
     console.clear();
