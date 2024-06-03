@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable max-lines-per-function */
 /*
 Step 1: Write a textual description of the problem or exercise.
@@ -79,7 +80,39 @@ function createHuman() {
   return Object.assign(playerObject, humanObject);
 }
 
+function createScore() {
+  return {
+    human: 0,
+    computer: 0,
+    winningScore: 3,
+    // incrementValue: 1,
 
+    reset() {
+      this.human = 0;
+      this.computer = 0;
+    },
+
+    reachedWinningScore() {
+      return this.human === this.winningScore || this.computer === this.winningScore;
+    },
+
+    // incrementHuman() {
+    //   this.human += this.incrementValue;
+    // },
+
+    // incrementComputer() {
+    //   this.computer += this.incrementValue;
+    // },
+    display() {
+      console.log(`You: ${this.human} | Computer: ${this.computer}`);
+    },
+
+    wonMatch() {
+      if (this.human === this.winningScore) print("Well done, you won the match!");
+      if (this.computer === this.winningScore) print("Computer won this match, I guess AI really is taking over, huh...");
+    },
+  };
+}
 // function createMove() {
 //   return {
 //     // possible state: rock, paper, scissors
@@ -102,6 +135,7 @@ function createHuman() {
 const RPSGame = {
   human: createHuman(),
   computer: createComputer(),
+  score: createScore(),
   winningCombos: {
     rock:     ['scissors', 'lizard'],
     paper:    ['rock',     'spock'],
@@ -117,6 +151,14 @@ const RPSGame = {
   displayGoodByeMessage() {
     console.clear();
     print("Thank you for playing Rock, Paper, Scissors. Goodbye!");
+  },
+
+  calculateWinner() {
+    let humanMove = this.human.move;
+    let computerMove = this.computer.move;
+
+    if (this.winningCombos[humanMove].includes(computerMove)) this.score.human += 1;
+    if (this.winningCombos[computerMove].includes(humanMove)) this.score.computer += 1;
   },
 
   displayWinner() {
@@ -154,9 +196,13 @@ const RPSGame = {
     console.clear();
     this.displayWelcomeMessage();
     do {
-      this.human.choose();
-      this.computer.choose();
-      this.displayWinner();
+      while (!this.score.reachedWinningScore()) {
+        this.human.choose();
+        this.computer.choose();
+        this.calculateWinner();
+        this.displayWinner();
+        this.score.display();
+      }
     } while (this.playAgain());
     this.displayGoodByeMessage();
   },
