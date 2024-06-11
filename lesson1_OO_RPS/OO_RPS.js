@@ -113,6 +113,7 @@ function createMovesLog() {
   return {
     human: [],
     computer: [],
+    logValidation: "log",
 
     logRound(humanMove, computerMove) {
       this.human.push(humanMove);
@@ -124,10 +125,8 @@ function createMovesLog() {
     },
 
     reset() {
-      // if (this.score.reachedWinningScore()) {
       this.human = [];
       this.computer = [];
-      // }
     },
   };
 }
@@ -157,7 +156,7 @@ const RPSGame = {
 
   displayGoodByeMessage() {
     console.clear();
-    console.log("*** Thank you for playing Rock, Paper, Scissors. Goodbye! ***");
+    console.log("*** Thank you for playing, goodbye! ***");
   },
 
   calculateWinner() {
@@ -186,9 +185,20 @@ const RPSGame = {
 
   continueToNextRound() {
     if (!this.score.reachedWinningScore()) {
+      let choice = null;
+
       console.log();
-      print("Press Enter to continue to the next round");
-      readline.question();
+      print("Type 'log' (l) to see your previous moves or hit Enter to continue to the next round!");
+      choice = readline.question().toLowerCase();
+
+      if (this.movesLog.logValidation.startsWith(choice) && (choice.length > 0)) {
+        console.clear();
+        this.movesLog.displayLog();
+        console.log();
+        print("Press Enter to continue to the next round!");
+        readline.question();
+      }
+
       console.clear();
     }
   },
@@ -200,7 +210,7 @@ const RPSGame = {
     let userChoice = readline.question().toLowerCase();
 
     while (!VIABLE_INPUTS.includes(userChoice)) {
-      print("I couldn't hear you! Do you want to play again?");
+      print("I couldn't hear you! Do you want to play again? (y/n)");
       userChoice = readline.question().toLowerCase();
     }
     console.clear();
@@ -223,7 +233,7 @@ const RPSGame = {
         this.score.display();
         this.displayWinner();
         this.movesLog.logRound(this.human.move, this.computer.move);
-        this.movesLog.displayLog();
+        // this.movesLog.displayLog();
 
         this.continueToNextRound();
         this.score.displayWinnerMessage();
