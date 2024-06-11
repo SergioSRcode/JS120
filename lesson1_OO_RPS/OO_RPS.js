@@ -218,23 +218,33 @@ const RPSGame = {
     return userChoice === "y" || userChoice === "yes";
   },
 
+  compareMoves() {
+    this.human.choose();
+    this.computer.choose();
+    this.calculateWinner();
+    console.clear();
+  },
+
+  displayRoundStats() {
+    this.score.display();
+    this.displayWinner();
+  },
+
+  startNewGame() {
+    this.score.reset();
+    this.movesLog.reset();
+  },
+
   play() {
     console.clear();
     this.displayWelcomeMessage();
     do {
-      this.score.reset();
-      this.movesLog.reset();
+      this.startNewGame();
       while (!this.score.reachedWinningScore()) {
         this.score.display();
-        this.human.choose();
-        this.computer.choose();
-        this.calculateWinner();
-        console.clear();
-        this.score.display();
-        this.displayWinner();
+        this.compareMoves();
+        this.displayRoundStats();
         this.movesLog.logRound(this.human.move, this.computer.move);
-        // this.movesLog.displayLog();
-
         this.continueToNextRound();
         this.score.displayWinnerMessage();
       }
