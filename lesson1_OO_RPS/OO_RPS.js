@@ -35,12 +35,12 @@ const readline = require("readline-sync");
 
 function print(text) {
   console.log(`==>  ${text}`);
-  // console.log();
 }
 
 function createPlayer() {
   return {
     move: null,
+    validChoices: ["rock", "paper", "scissors", "lizard", "spock"],
   };
 }
 
@@ -49,9 +49,8 @@ function createComputer() {
 
   let computerObject = {
     choose() {
-      const CHOICES = ["rock", "paper", "scissors"];
-      let randomIdx = Math.floor(Math.random() * CHOICES.length);
-      this.move = CHOICES[randomIdx];
+      let randomIdx = Math.floor(Math.random() * this.validChoices.length);
+      this.move = this.validChoices[randomIdx];
     },
   };
 
@@ -63,17 +62,18 @@ function createHuman() {
 
   let humanObject = {
     choose() {
+      const VALID_ABBREVS = ["r", "p", "sc", "l", "sp"];
       let choice;
 
       while (true) {
-        print("Please choose rock, paper, or scissors:");
-        choice = readline.question();
+        print("Please choose rock (r), paper (p), scissors (sc), lizard (l) or spock (sp)");
+        choice = readline.question().toLowerCase();
 
-        if (["rock", "paper", "scissors"].includes(choice)) break;
+        if (this.validChoices.includes(choice) || VALID_ABBREVS.includes(choice)) break;
         console.log("Sorry, invalid choice.");
       }
 
-      this.move = choice;
+      this.move = this.validChoices.find(validChoice => validChoice.startsWith(choice));
     },
   };
 
@@ -99,9 +99,11 @@ function createScore() {
       console.log(`You: ${this.human} | Computer: ${this.computer}`);
     },
 
-    wonMatch() {
-      if (this.human === this.winningScore) print("Well done, you won the match!");
-      if (this.computer === this.winningScore) print("Computer won this match, I guess AI really is taking over, huh...");
+    displayWinnerMessage() {
+      if (this.reachedWinningScore()) {
+        if (this.human === this.winningScore) print("Well done, you won the match!\n");
+        if (this.computer === this.winningScore) print("Computer won this match...I guess AI really is taking over, huh...\n");
+      }
     },
   };
 }
@@ -132,8 +134,8 @@ const RPSGame = {
     rock:     ['scissors', 'lizard'],
     paper:    ['rock',     'spock'],
     scissors: ['paper',    'lizard'],
-    // lizard:   ['paper',    'spock'],
-    // spock:    ['rock',     'scissors'],
+    lizard:   ['paper',    'spock'],
+    spock:    ['rock',     'scissors'],
   },
 
   displayWelcomeMessage() {
@@ -207,6 +209,7 @@ const RPSGame = {
         this.score.display();
         this.displayWinner();
         this.continueToNextRound();
+        this.score.displayWinnerMessage();
       }
     } while (this.playAgain());
     this.displayGoodByeMessage();
