@@ -154,9 +154,9 @@ const RPSGame = {
     console.clear();
   },
 
-  displayGoodByeMessage() {
-    console.clear();
-    console.log("*** Thank you for playing, goodbye! ***");
+  startNewGame() {
+    this.score.reset();
+    this.movesLog.reset();
   },
 
   calculateWinner() {
@@ -165,6 +165,13 @@ const RPSGame = {
 
     if (this.winningCombos[humanMove].includes(computerMove)) this.score.human += 1;
     if (this.winningCombos[computerMove].includes(humanMove)) this.score.computer += 1;
+  },
+
+  compareMoves() {
+    this.human.choose();
+    this.computer.choose();
+    this.calculateWinner();
+    console.clear();
   },
 
   displayWinner() {
@@ -181,6 +188,11 @@ const RPSGame = {
     } else {
       print("It's a tie");
     }
+  },
+
+  displayRoundStats() {
+    this.score.display();
+    this.displayWinner();
   },
 
   continueToNextRound() {
@@ -218,21 +230,9 @@ const RPSGame = {
     return userChoice === "y" || userChoice === "yes";
   },
 
-  compareMoves() {
-    this.human.choose();
-    this.computer.choose();
-    this.calculateWinner();
+  displayGoodByeMessage() {
     console.clear();
-  },
-
-  displayRoundStats() {
-    this.score.display();
-    this.displayWinner();
-  },
-
-  startNewGame() {
-    this.score.reset();
-    this.movesLog.reset();
+    console.log("*** Thank you for playing, goodbye! ***");
   },
 
   play() {
