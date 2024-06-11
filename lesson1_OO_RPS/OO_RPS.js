@@ -139,7 +139,13 @@ const RPSGame = {
   },
 
   displayWelcomeMessage() {
-    console.log("*** Welcome to Rock, Paper, Scissors! ***");
+    console.log("*** Welcome to Rock, Paper, Scissors, Lizard and Spock! ***");
+    console.log();
+    console.log(`Rules:  The first to win ${this.score.winningScore} rounds wins the match!`);
+    console.log();
+    print("Press Enter to Start the game!");
+    readline.question();
+    console.clear();
   },
 
   displayGoodByeMessage() {
