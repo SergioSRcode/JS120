@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 /* eslint-disable max-len */
 /* eslint-disable max-lines-per-function */
 /*
@@ -107,29 +108,35 @@ function createScore() {
     },
   };
 }
-// function createMove() {
-//   return {
-//     // possible state: rock, paper, scissors
-//   };
-// }
 
-// function createRule() {
-//   return {
-//     // possible state: not clear if rules need state
-//   };
-// }
+function createMovesLog() {
+  return {
+    human: [],
+    computer: [],
 
-// Since we don't yet know where to put `compare`, let's define
-// it as an ordinary function.
+    logRound(humanMove, computerMove) {
+      this.human.push(humanMove);
+      this.computer.push(computerMove);
+    },
 
-// let compare = function(move1, move2) {
-//   // not yet implemented
-// };
+    displayLog() {
+      this.human.forEach((_, idx) => console.log(`Round: ${idx + 1} | Human: ${this.human[idx]} | Computer: ${this.computer[idx]}`));
+    },
+
+    reset() {
+      // if (this.score.reachedWinningScore()) {
+      this.human = [];
+      this.computer = [];
+      // }
+    },
+  };
+}
 
 const RPSGame = {
   human: createHuman(),
   computer: createComputer(),
   score: createScore(),
+  movesLog: createMovesLog(),
   winningCombos: {
     rock:     ['scissors', 'lizard'],
     paper:    ['rock',     'spock'],
@@ -206,6 +213,7 @@ const RPSGame = {
     this.displayWelcomeMessage();
     do {
       this.score.reset();
+      this.movesLog.reset();
       while (!this.score.reachedWinningScore()) {
         this.score.display();
         this.human.choose();
@@ -214,6 +222,9 @@ const RPSGame = {
         console.clear();
         this.score.display();
         this.displayWinner();
+        this.movesLog.logRound(this.human.move, this.computer.move);
+        this.movesLog.displayLog();
+
         this.continueToNextRound();
         this.score.displayWinnerMessage();
       }
