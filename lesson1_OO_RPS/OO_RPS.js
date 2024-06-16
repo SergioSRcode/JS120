@@ -156,7 +156,14 @@ const RPSGame = {
 
   startNewGame() {
     this.score.reset();
-    this.movesLog.reset();
+    // this.movesLog.reset();
+  },
+
+  compareMoves() {
+    this.human.choose();
+    this.computer.choose();
+    this.calculateWinner();
+    console.clear();
   },
 
   calculateWinner() {
@@ -165,13 +172,6 @@ const RPSGame = {
 
     if (this.winningCombos[humanMove].includes(computerMove)) this.score.human += 1;
     if (this.winningCombos[computerMove].includes(humanMove)) this.score.computer += 1;
-  },
-
-  compareMoves() {
-    this.human.choose();
-    this.computer.choose();
-    this.calculateWinner();
-    console.clear();
   },
 
   displayWinner() {
@@ -218,7 +218,7 @@ const RPSGame = {
   playAgain() {
     const VIABLE_INPUTS = ["y", "yes", "n", "no"];
 
-    print("What a great game! Play again?");
+    print("What a great game! Play again? (y/n)");
     let userChoice = readline.question().toLowerCase();
 
     while (!VIABLE_INPUTS.includes(userChoice)) {
