@@ -1,37 +1,6 @@
-/* eslint-disable max-statements */
+/* eslint-disable indent */
 /* eslint-disable max-len */
 /* eslint-disable max-lines-per-function */
-/*
-Step 1: Write a textual description of the problem or exercise.
-
-Our first step is to write a textual description of the RPS game:
-
-RPS is a two-player game where each player chooses one of three possible moves:
-rock, paper, or scissors.
-The winner is chosen by comparing their moves with the following rules:
-
-* Rock crushes scissors, i.e., rock wins against scissors.
-* Scissors cuts paper, i.e., scissors beats paper.
-* Paper wraps rock, i.e., paper beats rock.
-* If the players chose the same move, the game is a tie.
-
-Step 2: Extract the significant nouns and verbs from the description!
-
-Nouns: player, move, rule
-verbs: choose, compare
-
-Step 3: Organize and associate the verbs with the nouns.
-
-player
-  - choose
-Move
-Rule
-
-???
-  - compare
-
-*/
-
 const readline = require("readline-sync");
 
 function print(text) {
@@ -93,7 +62,8 @@ function createScore() {
     },
 
     reachedWinningScore() {
-      return this.human === this.winningScore || this.computer === this.winningScore;
+      return this.human === this.winningScore
+      || this.computer === this.winningScore;
     },
 
     display() {
@@ -121,7 +91,9 @@ function createMovesLog() {
     },
 
     displayLog() {
-      this.human.forEach((_, idx) => console.log(`Round: ${idx + 1} | Human: ${this.human[idx]} | Computer: ${this.computer[idx]}`));
+      this.human.forEach((_, idx) => console.log(
+        `Round: ${idx + 1} | You: ${this.human[idx]} | Computer: ${this.computer[idx]}`
+      ));
     },
 
     reset() {
@@ -162,6 +134,7 @@ const RPSGame = {
   compareMoves() {
     this.human.choose();
     this.computer.choose();
+    this.adjustComputerChoice();
     this.calculateWinner();
     console.clear();
   },
@@ -195,12 +168,43 @@ const RPSGame = {
     this.displayWinner();
   },
 
+  getHumanWins() {
+    return this.movesLog.human.filter((move, idx) => {
+      return this.winningCombos[move].includes(this.movesLog.computer[idx]);
+    });
+  },
+
+  getKillerMove() {
+    let humanWins = this.getHumanWins();
+
+    for (let idx = 0; idx < this.human.validChoices.length; idx++) {
+      let winCount = 0;
+      let possibleMove = this.human.validChoices[idx];
+      for (let jdx = 0; jdx < humanWins.length; jdx++) {
+        let currentMove = humanWins[jdx];
+
+        if (possibleMove === currentMove) winCount++;
+        if (winCount > (humanWins.length / 100 * 60)) return currentMove;
+      }
+    }
+
+    return false;
+  },
+
+  adjustComputerChoice() {
+    if (this.getKillerMove() /*&& (this.getHumanWins().length > 1)*/) {
+      this.computer.move = this.computer.validChoices.find(move => this.winningCombos[move]
+                                                     .includes(this.getKillerMove()));
+    }
+  },
+
   continueToNextRound() {
     if (!this.score.reachedWinningScore()) {
       let choice = null;
 
       console.log();
-      print("Type 'log' (l) to see your previous moves or hit Enter to continue to the next round!");
+      print("Type 'log' (l) to see your previous moves or");
+      print("Hit Enter to continue to the next round!");
       choice = readline.question().toLowerCase();
 
       if (this.movesLog.logValidation.startsWith(choice) && (choice.length > 0)) {
