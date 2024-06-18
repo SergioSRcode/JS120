@@ -192,9 +192,11 @@ const RPSGame = {
   },
 
   adjustComputerChoice() {
-    if (this.getKillerMove() /*&& (this.getHumanWins().length > 1)*/) {
+    let killerMove = this.getKillerMove();
+
+    if (killerMove) {
       this.computer.move = this.computer.validChoices.find(move => this.winningCombos[move]
-                                                     .includes(this.getKillerMove()));
+                                                     .includes(killerMove));
     }
   },
 
