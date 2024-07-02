@@ -21,7 +21,7 @@ function logReturnVal(func) {
 logReturnVal(turk.getDescription);
 
 /*
-Since the function "getDescription" is passed in as the arg
+Since the method "getDescription" is passed in as the arg
 for "LogReturnVal", it looses its execution context.
 Thus "this" === undefined and loggs "undefined undefined is a undefined."
 */
