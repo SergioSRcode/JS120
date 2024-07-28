@@ -24,28 +24,27 @@ Computer.prototype.choose = function() {
   this.move = this.validChoices[randomIdx];
 };
 
-// function createHuman() {
-//   let playerObject = createPlayer();
+function Human() {
+  Player.call(this);
+}
 
-//   let humanObject = {
-//     choose() {
-//       const VALID_ABBREVS = ["r", "p", "sc", "l", "sp"];
-//       let choice;
+Human.prototype = Object.create(Player.prototype);
+Human.prototype.constructor = Human;
 
-//       while (true) {
-//         print("Please choose rock (r), paper (p), scissors (sc), lizard (l) or spock (sp)");
-//         choice = readline.question().toLowerCase();
+Human.prototype.choose = function() {
+  const VALID_ABBREVS = ["r", "p", "sc", "l", "sp"];
+  let choice;
 
-//         if (this.validChoices.includes(choice) || VALID_ABBREVS.includes(choice)) break;
-//         console.log("Sorry, invalid choice.");
-//       }
+  while (true) {
+    print("Please choose rock (r), paper (p), scissors (sc), lizard (l) or spock (sp)");
+    choice = readline.question().toLowerCase();
 
-//       this.move = this.validChoices.find(validChoice => validChoice.startsWith(choice));
-//     },
-//   };
+    if (this.validChoices.includes(choice) || VALID_ABBREVS.includes(choice)) break;
+    console.log("Sorry, invalid choice.");
+  }
 
-//   return Object.assign(playerObject, humanObject);
-// }
+  this.move = this.validChoices.find(validChoice => validChoice.startsWith(choice));
+};
 
 // function createScore() {
 //   return {
