@@ -46,34 +46,32 @@ Human.prototype.choose = function() {
   this.move = this.validChoices.find(validChoice => validChoice.startsWith(choice));
 };
 
-// function createScore() {
-//   return {
-//     human: 0,
-//     computer: 0,
-//     winningScore: 3,
+function Score() {
+  this.human = 0;
+  this.computer = 0;
+  this.winningScore = 3;
+}
 
-//     reset() {
-//       this.human = 0;
-//       this.computer = 0;
-//     },
+Score.prototype.reset = function() {
+  this.human = 0;
+  this.computer = 0;
+};
 
-//     reachedWinningScore() {
-//       return this.human === this.winningScore
-//       || this.computer === this.winningScore;
-//     },
+Score.prototype.reachedWinningScore = function() {
+  return this.human === this.winningScore
+  || this.computer === this.winningScore;
+};
 
-//     display() {
-//       console.log(`You: ${this.human} | Computer: ${this.computer}`);
-//     },
+Score.prototype.display = function() {
+  console.log(`You: ${this.human} | Computer: ${this.computer}`);
+};
 
-//     displayWinnerMessage() {
-//       if (this.reachedWinningScore()) {
-//         if (this.human === this.winningScore) print("Well done, you won the match!\n");
-//         if (this.computer === this.winningScore) print("Computer won this match...I guess AI really is taking over, huh...\n");
-//       }
-//     },
-//   };
-// }
+Score.prototype.displayWinnerMessage = function() {
+  if (this.reachedWinningScore()) {
+    if (this.human === this.winningScore) print("Well done, you won the match!\n");
+    if (this.computer === this.winningScore) print("Computer won this match...I guess AI really is taking over, huh...\n");
+  }
+};
 
 // function createMovesLog() {
 //   return {
