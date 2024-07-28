@@ -73,29 +73,27 @@ Score.prototype.displayWinnerMessage = function() {
   }
 };
 
-// function createMovesLog() {
-//   return {
-//     human: [],
-//     computer: [],
-//     logValidation: "log",
+function MovesLog() {
+  this.human = [];
+  this.computer = [];
+  this.logValidation = "log";
+}
 
-//     logRound(humanMove, computerMove) {
-//       this.human.push(humanMove);
-//       this.computer.push(computerMove);
-//     },
+MovesLog.prototype.logRound = function(humanMove, computerMove) {
+  this.human.push(humanMove);
+  this.computer.push(computerMove);
+};
 
-//     displayLog() {
-//       this.human.forEach((_, idx) => console.log(
-//         `Round: ${idx + 1} | You: ${this.human[idx]} | Computer: ${this.computer[idx]}`
-//       ));
-//     },
+MovesLog.prototype.displayLog = function() {
+  this.human.forEach((_, idx) => console.log(
+    `Round: ${idx + 1} | You: ${this.human[idx]} | Computer: ${this.computer[idx]}`
+  ));
+};
 
-//     reset() {
-//       this.human = [];
-//       this.computer = [];
-//     },
-//   };
-// }
+MovesLog.prototype.reset = function() {
+  this.human = [];
+  this.computer = [];
+};
 
 // const RPSGame = {
 //   human: createHuman(),
