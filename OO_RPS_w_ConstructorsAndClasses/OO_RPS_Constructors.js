@@ -95,160 +95,162 @@ MovesLog.prototype.reset = function() {
   this.computer = [];
 };
 
-const RPSGame = {
-  human: new Human(),
-  computer: new Computer(),
-  score: new Score(),
-  movesLog: new MovesLog(),
-  winningCombos: {
+function RPSGame() {
+  this.human = new Human();
+  this.computer = new Computer();
+  this.score = new Score();
+  this.movesLog = new MovesLog();
+  this.winningCombos = {
     rock:     ['scissors', 'lizard'],
     paper:    ['rock',     'spock'],
     scissors: ['paper',    'lizard'],
     lizard:   ['paper',    'spock'],
     spock:    ['rock',     'scissors'],
-  },
+  };
+}
 
-  displayWelcomeMessage() {
-    console.log("*** Welcome to Rock, Paper, Scissors, Lizard and Spock! ***");
-    console.log();
-    console.log(`Rules:  The first to win ${this.score.winningScore} rounds wins the match!`);
-    console.log();
-    print("Press Enter to Start the game!");
-    readline.question();
-    console.clear();
-  },
-
-  startNewGame() {
-    this.score.reset();
-    // this.movesLog.reset();
-  },
-
-  compareMoves() {
-    this.human.choose();
-    this.computer.choose();
-    this.adjustComputerChoice();
-    this.calculateWinner();
-    console.clear();
-  },
-
-  calculateWinner() {
-    let humanMove = this.human.move;
-    let computerMove = this.computer.move;
-
-    if (this.winningCombos[humanMove].includes(computerMove)) this.score.human += 1;
-    if (this.winningCombos[computerMove].includes(humanMove)) this.score.computer += 1;
-  },
-
-  displayWinner() {
-    let humanMove = this.human.move;
-    let computerMove = this.computer.move;
-
-    print(`You chose: ${humanMove}`);
-    print(`The computer chose: ${computerMove}`);
-
-    if (this.winningCombos[humanMove].includes(computerMove)) {
-      print("You win!");
-    } else if (this.winningCombos[computerMove].includes(humanMove)) {
-      print("Aww, computer won!");
-    } else {
-      print("It's a tie");
-    }
-  },
-
-  displayRoundStats() {
-    this.score.display();
-    this.displayWinner();
-  },
-
-  getHumanWins() {
-    return this.movesLog.human.filter((move, idx) => {
-      return this.winningCombos[move].includes(this.movesLog.computer[idx]);
-    });
-  },
-
-  getKillerMove() {
-    let humanWins = this.getHumanWins();
-
-    for (let idx = 0; idx < this.human.validChoices.length; idx++) {
-      let winCount = 0;
-      let possibleMove = this.human.validChoices[idx];
-      for (let jdx = 0; jdx < humanWins.length; jdx++) {
-        let currentMove = humanWins[jdx];
-
-        if (possibleMove === currentMove) winCount++;
-        if (winCount > (humanWins.length / 100 * 60)) return currentMove;
-      }
-    }
-
-    return false;
-  },
-
-  adjustComputerChoice() {
-    let killerMove = this.getKillerMove();
-
-    if (killerMove) {
-      this.computer.move = this.computer.validChoices.find(move => this.winningCombos[move]
-                                                     .includes(killerMove));
-    }
-  },
-
-  continueToNextRound() {
-    if (!this.score.reachedWinningScore()) {
-      let choice = null;
-
-      console.log();
-      print("Type 'log' (l) to see your previous moves or");
-      print("Hit Enter to continue to the next round!");
-      choice = readline.question().toLowerCase();
-
-      if (this.movesLog.logValidation.startsWith(choice) && (choice.length > 0)) {
-        console.clear();
-        this.movesLog.displayLog();
-        console.log();
-        print("Press Enter to continue to the next round!");
-        readline.question();
-      }
-
-      console.clear();
-    }
-  },
-
-  playAgain() {
-    const VIABLE_INPUTS = ["y", "yes", "n", "no"];
-
-    print("What a great game! Play again? (y/n)");
-    let userChoice = readline.question().toLowerCase();
-
-    while (!VIABLE_INPUTS.includes(userChoice)) {
-      print("I couldn't hear you! Do you want to play again? (y/n)");
-      userChoice = readline.question().toLowerCase();
-    }
-    console.clear();
-
-    return userChoice === "y" || userChoice === "yes";
-  },
-
-  displayGoodByeMessage() {
-    console.clear();
-    console.log("*** Thank you for playing, goodbye! ***");
-  },
-
-  play() {
-    console.clear();
-    this.displayWelcomeMessage();
-    do {
-      this.startNewGame();
-      while (!this.score.reachedWinningScore()) {
-        this.score.display();
-        this.compareMoves();
-        this.displayRoundStats();
-        this.movesLog.logRound(this.human.move, this.computer.move);
-        this.continueToNextRound();
-        this.score.displayWinnerMessage();
-      }
-    } while (this.playAgain());
-    this.displayGoodByeMessage();
-  },
+RPSGame.prototype.displayWelcomeMessage = function() {
+  console.log("*** Welcome to Rock, Paper, Scissors, Lizard and Spock! ***");
+  console.log();
+  console.log(`Rules:  The first to win ${this.score.winningScore} rounds wins the match!`);
+  console.log();
+  print("Press Enter to Start the game!");
+  readline.question();
+  console.clear();
 };
 
-RPSGame.play();
+RPSGame.prototype.startNewGame = function() {
+  this.score.reset();
+  // this.movesLog.reset();
+};
+
+RPSGame.prototype.compareMoves = function() {
+  this.human.choose();
+  this.computer.choose();
+  this.adjustComputerChoice();
+  this.calculateWinner();
+  console.clear();
+};
+
+RPSGame.prototype.calculateWinner = function() {
+  let humanMove = this.human.move;
+  let computerMove = this.computer.move;
+
+  if (this.winningCombos[humanMove].includes(computerMove)) this.score.human += 1;
+  if (this.winningCombos[computerMove].includes(humanMove)) this.score.computer += 1;
+};
+
+RPSGame.prototype.displayWinner = function() {
+  let humanMove = this.human.move;
+  let computerMove = this.computer.move;
+
+  print(`You chose: ${humanMove}`);
+  print(`The computer chose: ${computerMove}`);
+
+  if (this.winningCombos[humanMove].includes(computerMove)) {
+    print("You win!");
+  } else if (this.winningCombos[computerMove].includes(humanMove)) {
+    print("Aww, computer won!");
+  } else {
+    print("It's a tie");
+  }
+};
+
+RPSGame.prototype.displayRoundStats = function() {
+  this.score.display();
+  this.displayWinner();
+};
+
+RPSGame.prototype.getHumanWins = function() {
+  return this.movesLog.human.filter((move, idx) => {
+    return this.winningCombos[move].includes(this.movesLog.computer[idx]);
+  });
+};
+
+RPSGame.prototype.getKillerMove = function() {
+  let humanWins = this.getHumanWins();
+
+  for (let idx = 0; idx < this.human.validChoices.length; idx++) {
+    let winCount = 0;
+    let possibleMove = this.human.validChoices[idx];
+    for (let jdx = 0; jdx < humanWins.length; jdx++) {
+      let currentMove = humanWins[jdx];
+
+      if (possibleMove === currentMove) winCount++;
+      if (winCount > (humanWins.length / 100 * 60)) return currentMove;
+    }
+  }
+
+  return false;
+};
+
+RPSGame.prototype.adjustComputerChoice = function() {
+  let killerMove = this.getKillerMove();
+
+  if (killerMove) {
+    this.computer.move = this.computer.validChoices.find(move => this.winningCombos[move]
+                                                   .includes(killerMove));
+  }
+};
+
+RPSGame.prototype.continueToNextRound = function() {
+  if (!this.score.reachedWinningScore()) {
+    let choice = null;
+
+    console.log();
+    print("Type 'log' (l) to see your previous moves or");
+    print("Hit Enter to continue to the next round!");
+    choice = readline.question().toLowerCase();
+
+    if (this.movesLog.logValidation.startsWith(choice) && (choice.length > 0)) {
+      console.clear();
+      this.movesLog.displayLog();
+      console.log();
+      print("Press Enter to continue to the next round!");
+      readline.question();
+    }
+
+    console.clear();
+  }
+};
+
+RPSGame.prototype.playAgain = function() {
+  const VIABLE_INPUTS = ["y", "yes", "n", "no"];
+
+  print("What a great game! Play again? (y/n)");
+  let userChoice = readline.question().toLowerCase();
+
+  while (!VIABLE_INPUTS.includes(userChoice)) {
+    print("I couldn't hear you! Do you want to play again? (y/n)");
+    userChoice = readline.question().toLowerCase();
+  }
+  console.clear();
+
+  return userChoice === "y" || userChoice === "yes";
+};
+
+RPSGame.prototype.displayGoodByeMessage = function() {
+  console.clear();
+  console.log("*** Thank you for playing, goodbye! ***");
+};
+
+RPSGame.prototype.play = function() {
+  console.clear();
+  this.displayWelcomeMessage();
+  do {
+    this.startNewGame();
+    while (!this.score.reachedWinningScore()) {
+      this.score.display();
+      this.compareMoves();
+      this.displayRoundStats();
+      this.movesLog.logRound(this.human.move, this.computer.move);
+      this.continueToNextRound();
+      this.score.displayWinnerMessage();
+    }
+  } while (this.playAgain());
+  this.displayGoodByeMessage();
+};
+
+let rpsGame = new RPSGame();
+
+rpsGame.play();
