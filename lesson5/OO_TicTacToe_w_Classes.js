@@ -43,39 +43,46 @@ Square (n)
 
 class Board {
   constructor() {
+    //STUB
     // Game board
   }
 }
 
 class Square {
   constructor() {
+    //STUB
     // The game board is comprised of squares to be marked
   }
 }
 
 class Row {
   constructor() {
+    //STUB
     // the game board consists of 3 rows of 3 squares each
   }
 }
 
 class Marker {
   constructor() {
+    //STUB
     // marking a move on the board
   }
 }
 
 class Player {
   constructor() {
+    //STUB
     // Possibly a marker for Player and/or Computer
   }
 
   mark() {
+    //STUB
     // mark a square on the board
     // how do we access the board?
   }
 
   play() {
+    //STUB
     // filler
   }
 }
@@ -83,6 +90,7 @@ class Player {
 class Human extends Player {
   constructor() {
     super();
+    //STUB
     //filler
   }
 }
@@ -90,17 +98,70 @@ class Human extends Player {
 class Computer extends Player {
   constructor() {
     super();
+    //STUB
     //filler
   }
 }
 
 class TTTGame {
   constructor() {
+    //STUB
     // needs a board an 2 players (Player and Computer)
   }
 
   play() {
-    // start game
+    // SPIKE
+    this.displayWelcomeMessage();
+
+    while (true) {
+      this.displayBoard();
+
+      this.firstPlayerMoves();
+      if (this.gameOver()) break;
+
+      this.secondPlayerMoves();
+      if (this.gameOver()) break;
+      break; // <= execute loop only once for now
+    }
+
+    this.displayResults();
+    this.displayGoodbyeMessage();
+  }
+
+  displayWelcomeMessage() {
+    //STUB
+    //show welcome message
+  }
+
+  displayGoodbyeMessage() {
+    //STUB
+    //show goodbye message
+  }
+
+  displayResults() {
+    //STUB
+    // show results of game (w/l/tie)
+  }
+
+  displayBoard() {
+    //STUB
+    // show game board in current state
+  }
+
+  firstPlayerMoves() {
+    //STUB
+    // first player marks a sqare on board
+  }
+
+  secondPlayerMoves() {
+    //STUB
+    // second player marks a sqare on board
+  }
+
+  gameOver() {
+    //STUB
+    // if a player has three in a row, return true
+    return false;
   }
 }
 
