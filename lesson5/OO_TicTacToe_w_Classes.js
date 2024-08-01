@@ -41,33 +41,42 @@ Square (n)
 
 */
 
+class Square {
+  static UNUSED_SQUARE = " ";
+  static HUMAN_MARKER = "X";
+  static COMPUTER_MARKER = "O";
+
+  constructor(marker = Square.UNUSED_SQUARE) {
+    this.marker = marker;
+  }
+
+  toString() {
+    return this.marker;
+  }
+}
+
 class Board {
   constructor() {
-    //STUB
-    // Game board
+    this.squares = {};
+    for (let counter = 1; counter <= 9; ++counter) {
+      this.squares[counter] = new Square();
+    }
   }
 
   display() {
     console.log("");
     console.log("     |     |");
-    console.log("  O  |     |  O  ");
+    console.log(`  ${this.squares["1"]}  |  ${this.squares["2"]}  |  ${this.squares["3"]}  `);
     console.log("     |     |");
     console.log("-----+-----+-----");
     console.log("     |     |");
-    console.log("     |  X  |     ");
+    console.log(`  ${this.squares["4"]}  |  ${this.squares["5"]}  |  ${this.squares["6"]}  `);
     console.log("     |     |");
     console.log("-----+-----+-----");
     console.log("     |     |");
-    console.log("  X  |     |     ");
+    console.log(`  ${this.squares["7"]}  |  ${this.squares["8"]}  |  ${this.squares["9"]}  `);
     console.log("     |     |");
     console.log("");
-  }
-}
-
-class Square {
-  constructor() {
-    //STUB
-    // The game board is comprised of squares to be marked
   }
 }
 
