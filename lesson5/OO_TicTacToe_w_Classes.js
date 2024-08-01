@@ -92,6 +92,13 @@ class Board {
     console.log("");
   }
 
+  displayWithClear() {
+    console.clear();
+    console.log("");
+    console.log("");
+    this.display();
+  }
+
   markSquareAt(key, marker) {
     this.squares[key].setMarker(marker);
   }
@@ -155,34 +162,36 @@ class TTTGame {
   }
 
   play() {
-    // SPIKE
     this.displayWelcomeMessage();
+    this.board.display();
 
     while (true) {
-      this.board.display();
-
       this.humanMoves();
       if (this.gameOver()) break;
 
       this.computerMoves();
       if (this.gameOver()) break;
-    }
 
+      this.board.displayWithClear();
+    }
+    this.board.displayWithClear();
     this.displayResults();
     this.displayGoodbyeMessage();
   }
 
   displayWelcomeMessage() {
-    //STUB
+    console.clear();
     console.log("Welcome to Tic Tac Toe!");
+    console.log("");
   }
 
   displayGoodbyeMessage() {
-    //STUB
     console.log("Thanks for playing Tic Tac Toe! Goodbye!");
   }
 
   displayResults() {
+    this.board.display();
+
     if (this.isWinner(this.human)) {
       console.log("You won! Congatulations!");
     } else if (this.isWinner(this.computer)) {
@@ -203,7 +212,7 @@ class TTTGame {
 
     while (true) {
       let validChoices = this.board.unusedSquares();
-      const prompt = `Choose a square(${validChoices.join(", ")})`;
+      const prompt = `Choose a square(${validChoices.join(", ")}): `;
       choice = readline.question(prompt);
 
       if (validChoices.includes(choice)) break;
