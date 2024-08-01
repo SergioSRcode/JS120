@@ -46,6 +46,22 @@ class Board {
     //STUB
     // Game board
   }
+
+  display() {
+    console.log("");
+    console.log("     |     |");
+    console.log("  O  |     |  O  ");
+    console.log("     |     |");
+    console.log("-----+-----+-----");
+    console.log("     |     |");
+    console.log("     |  X  |     ");
+    console.log("     |     |");
+    console.log("-----+-----+-----");
+    console.log("     |     |");
+    console.log("  X  |     |     ");
+    console.log("     |     |");
+    console.log("");
+  }
 }
 
 class Square {
@@ -105,8 +121,7 @@ class Computer extends Player {
 
 class TTTGame {
   constructor() {
-    //STUB
-    // needs a board an 2 players (Player and Computer)
+    this.board = new Board();
   }
 
   play() {
@@ -114,7 +129,7 @@ class TTTGame {
     this.displayWelcomeMessage();
 
     while (true) {
-      this.displayBoard();
+      this.board.display();
 
       this.firstPlayerMoves();
       if (this.gameOver()) break;
@@ -141,11 +156,6 @@ class TTTGame {
   displayResults() {
     //STUB
     // show results of game (w/l/tie)
-  }
-
-  displayBoard() {
-    //STUB
-    // show game board in current state
   }
 
   firstPlayerMoves() {
