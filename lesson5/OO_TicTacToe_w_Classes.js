@@ -62,6 +62,10 @@ class Square {
   isUnused() {
     return this.marker === Square.UNUSED_SQUARE;
   }
+
+  getMarker() {
+    return this.marker;
+  }
 }
 
 class Board {
@@ -96,12 +100,17 @@ class Board {
     let keys = Object.keys(this.squares);
     return keys.filter(key => this.squares[key].isUnused());
   }
-}
 
-class Row {
-  constructor() {
-    //STUB
-    // the game board consists of 3 rows of 3 squares each
+  isFull() {
+    return this.unusedSquares().length === 0;
+  }
+
+  countMarkersFor(player, keys) {
+    let markers = keys.filter(key => {
+      return this.squares[key].getMarker() === player.getMarker();
+    });
+
+    return markers.length;
   }
 }
 
@@ -118,20 +127,27 @@ class Player {
 class Human extends Player {
   constructor() {
     super(Square.HUMAN_MARKER);
-    //STUB
-    //filler
   }
 }
 
 class Computer extends Player {
   constructor() {
     super(Square.COMPUTER_MARKER);
-    //STUB
-    //filler
   }
 }
 
 class TTTGame {
+  static POSSIBLE_WINNING_ROWS = [
+    [ "1", "2", "3" ],            // top row of board
+    [ "4", "5", "6" ],            // center row of board
+    [ "7", "8", "9" ],            // bottom row of board
+    [ "1", "4", "7" ],            // left column of board
+    [ "2", "5", "8" ],            // middle column of board
+    [ "3", "6", "9" ],            // right column of board
+    [ "1", "5", "9" ],            // diagonal: top-left to bottom-right
+    [ "3", "5", "7" ],            // diagonal: bottom-left to top-right
+  ];
+
   constructor() {
     this.board = new Board();
     this.human = new Human();
@@ -167,8 +183,19 @@ class TTTGame {
   }
 
   displayResults() {
-    //STUB
-    // show results of game (w/l/tie)
+    if (this.isWinner(this.human)) {
+      console.log("You won! Congatulations!");
+    } else if (this.isWinner(this.computer)) {
+      console.log("I won! I won! Take that, human! The revolution is upon us!");
+    } else {
+      console.log("A tie. Next time I will wear a sweater!");
+    }
+  }
+
+  isWinner(player) {
+    return TTTGame.POSSIBLE_WINNING_ROWS.some(row => {
+      return this.board.countMarkersFor(player, row) === 3;
+    });
   }
 
   humanMoves() {
@@ -200,17 +227,11 @@ class TTTGame {
   }
 
   gameOver() {
-    return this.boardIsFull() || this.someoneWon();
-  }
-
-  boardIsFull() {
-    //STUB
-    return false;
+    return this.board.isFull() || this.someoneWon();
   }
 
   someoneWon() {
-    //STUB
-    return false;
+    return this.isWinner(this.human) || this.isWinner(this.computer);
   }
 }
 
