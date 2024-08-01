@@ -130,12 +130,12 @@ class TTTGame {
 
   displayWelcomeMessage() {
     //STUB
-    //show welcome message
+    console.log("Welcome to Tic Tac Toe!");
   }
 
   displayGoodbyeMessage() {
     //STUB
-    //show goodbye message
+    console.log("Thanks for playing Tic Tac Toe! Goodbye!");
   }
 
   displayResults() {
