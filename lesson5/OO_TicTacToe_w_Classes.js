@@ -190,6 +190,7 @@ class TTTGame {
   }
 
   displayResults() {
+    console.clear();
     this.board.display();
 
     if (this.isWinner(this.human)) {
