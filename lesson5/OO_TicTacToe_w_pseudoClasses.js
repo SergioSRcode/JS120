@@ -83,3 +83,30 @@ Board.prototype.countMarkersFor = function(player, keys) {
 // let board = new Board();
 // board.markSquareAt(6, Square.COMPUTER_MARKER);
 // board.display();
+
+function Player(marker) {
+  this.marker = marker;
+}
+
+Player.prototype.getMarker = function() {
+  return this.marker;
+};
+
+function Human() {
+  Player.call(this, Square.HUMAN_MARKER);
+}
+
+Human.prototype = Object.create(Player.prototype);
+Human.prototype.constructor = Human;
+
+function Computer() {
+  Player.call(this, Square.COMPUTER_MARKER);
+}
+
+Computer.prototype = Object.create(Player.prototype);
+Computer.prototype.constructor = Computer;
+
+// let human = new Human();
+// console.log(human.getMarker());
+// let computer = new Computer();
+// console.log(computer.getMarker());
