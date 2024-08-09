@@ -43,7 +43,7 @@ Square (n)
 let readline = require("readline-sync");
 
 class Square {
-  static UNUSED_SQUARE = [" 1", " 2", " 3", " 4", " 5", " 6", " 7", " 8", " 9"];
+  static UNUSED_SQUARES = [" 1", " 2", " 3", " 4", " 5", " 6", " 7", " 8", " 9"];
   static HUMAN_MARKER = "❌";
   static COMPUTER_MARKER = "⚪️";
 
@@ -60,7 +60,7 @@ class Square {
   }
 
   isUnused() {
-    return Square.UNUSED_SQUARE.includes(this.marker);
+    return Square.UNUSED_SQUARES.includes(this.marker);
   }
 
   getMarker() {
