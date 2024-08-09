@@ -213,7 +213,7 @@ class TTTGame {
 
     while (true) {
       let validChoices = this.board.unusedSquares();
-      const prompt = `Choose a square(${validChoices.join(", ")}): `;
+      const prompt = `Choose a square(${this.joinOr(validChoices, ", ")}): `;
       choice = readline.question(prompt);
 
       if (validChoices.includes(choice)) break;
@@ -242,6 +242,14 @@ class TTTGame {
 
   someoneWon() {
     return this.isWinner(this.human) || this.isWinner(this.computer);
+  }
+
+  joinOr(arr, separator = ", ", connector = "or") {
+    arr = arr.slice();
+    let lastChar = " " + connector + " " + arr.pop();
+    let str = arr.join(separator);
+
+    return str + lastChar;
   }
 }
 
