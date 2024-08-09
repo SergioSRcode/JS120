@@ -43,12 +43,12 @@ Square (n)
 let readline = require("readline-sync");
 
 class Square {
-  static UNUSED_SQUARE = " ";
-  static HUMAN_MARKER = "X";
-  static COMPUTER_MARKER = "O";
+  static UNUSED_SQUARE = [" 1", " 2", " 3", " 4", " 5", " 6", " 7", " 8", " 9"];
+  static HUMAN_MARKER = "❌";
+  static COMPUTER_MARKER = "⚪️";
 
-  constructor(marker = Square.UNUSED_SQUARE) {
-    this.marker = marker;
+  constructor(marker) {
+    this.marker = " " + marker;
   }
 
   toString() {
@@ -60,7 +60,7 @@ class Square {
   }
 
   isUnused() {
-    return this.marker === Square.UNUSED_SQUARE;
+    return Square.UNUSED_SQUARE.includes(this.marker);
   }
 
   getMarker() {
@@ -72,22 +72,22 @@ class Board {
   constructor() {
     this.squares = {};
     for (let counter = 1; counter <= 9; ++counter) {
-      this.squares[counter] = new Square();
+      this.squares[counter] = new Square(counter);
     }
   }
 
   display() {
     console.log("");
     console.log("     |     |");
-    console.log(`  ${this.squares["1"]}  |  ${this.squares["2"]}  |  ${this.squares["3"]}  `);
+    console.log(` ${this.squares["1"]}  | ${this.squares["2"]}  | ${this.squares["3"]}`);
     console.log("     |     |");
     console.log("-----+-----+-----");
     console.log("     |     |");
-    console.log(`  ${this.squares["4"]}  |  ${this.squares["5"]}  |  ${this.squares["6"]}  `);
+    console.log(` ${this.squares["4"]}  | ${this.squares["5"]}  | ${this.squares["6"]}`);
     console.log("     |     |");
     console.log("-----+-----+-----");
     console.log("     |     |");
-    console.log(`  ${this.squares["7"]}  |  ${this.squares["8"]}  |  ${this.squares["9"]}  `);
+    console.log(` ${this.squares["7"]}  | ${this.squares["8"]}  | ${this.squares["9"]}`);
     console.log("     |     |");
     console.log("");
   }
