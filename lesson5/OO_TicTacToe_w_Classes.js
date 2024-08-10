@@ -170,24 +170,28 @@ class TTTGame {
     this.displayWelcomeMessage();
 
     do {
-      this.board.reset();
-      this.board.display();
-
-      while (true) {
-        this.humanMoves();
-        if (this.gameOver()) break;
-
-        this.computerMoves();
-        if (this.gameOver()) break;
-
-        this.board.displayWithClear();
-      }
-
-      this.board.displayWithClear();
-      this.displayResults();
+      this.play1Game();
     } while (this.playAgain());
 
     this.displayGoodbyeMessage();
+  }
+
+  play1Game() {
+    this.board.reset();
+    this.board.display();
+
+    while (true) {
+      this.humanMoves();
+      if (this.gameOver()) break;
+
+      this.computerMoves();
+      if (this.gameOver()) break;
+
+      this.board.displayWithClear();
+    }
+
+    this.board.displayWithClear();
+    this.displayResults();
   }
 
   playAgain() {
