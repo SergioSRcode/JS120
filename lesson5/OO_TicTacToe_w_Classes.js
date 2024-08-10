@@ -70,7 +70,12 @@ class Square {
 
 class Board {
   constructor() {
+    this.reset();
+  }
+
+  reset() {
     this.squares = {};
+
     for (let counter = 1; counter <= 9; ++counter) {
       this.squares[counter] = new Square(counter);
     }
@@ -165,7 +170,7 @@ class TTTGame {
     this.displayWelcomeMessage();
 
     do {
-      this.board = new Board();
+      this.board.reset();
       this.board.display();
 
       while (true) {
