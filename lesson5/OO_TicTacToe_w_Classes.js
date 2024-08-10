@@ -163,20 +163,38 @@ class TTTGame {
 
   play() {
     this.displayWelcomeMessage();
-    this.board.display();
 
-    while (true) {
-      this.humanMoves();
-      if (this.gameOver()) break;
+    do {
+      this.board = new Board();
+      this.board.display();
 
-      this.computerMoves();
-      if (this.gameOver()) break;
+      while (true) {
+        this.humanMoves();
+        if (this.gameOver()) break;
+
+        this.computerMoves();
+        if (this.gameOver()) break;
+
+        this.board.displayWithClear();
+      }
 
       this.board.displayWithClear();
-    }
-    this.board.displayWithClear();
-    this.displayResults();
+      this.displayResults();
+    } while (this.playAgain());
+
     this.displayGoodbyeMessage();
+  }
+
+  playAgain() {
+    const POSSIBLE_CHOICES = ["yes", "y", "no", "n"];
+    let choice;
+
+    while (!POSSIBLE_CHOICES.includes(choice)) {
+      choice = readline.question("Continue playing? (y/n)\n").toLowerCase();
+    }
+
+    console.clear();
+    return choice[0] === POSSIBLE_CHOICES[1];
   }
 
   displayWelcomeMessage() {
@@ -213,7 +231,7 @@ class TTTGame {
 
     while (true) {
       let validChoices = this.board.unusedSquares();
-      const prompt = `Choose a square(${TTTGame.joinOr(validChoices, ", ")}): `;
+      const prompt = `Choose a square(${TTTGame.joinOr(validChoices, ", ")}):\n`;
       choice = readline.question(prompt);
 
       if (validChoices.includes(choice)) break;
@@ -257,3 +275,4 @@ class TTTGame {
 
 let game = new TTTGame();
 game.play();
+// TTTGame.playAgain();
