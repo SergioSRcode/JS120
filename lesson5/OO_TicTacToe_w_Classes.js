@@ -167,24 +167,6 @@ class TTTGame {
     this.computer = new Computer();
   }
 
-  findCriticalRow(player) {
-    return TTTGame.POSSIBLE_WINNING_ROWS.find(row => {
-      if ((this.board.countMarkersFor(player, row) === 2) &&
-          row.some(square => this.board.squares[square].isUnused())) {
-            return true;
-          }
-
-      return false;
-    });
-  }
-
-  findCriticalSquare(player) {
-    let criticalRow = this.findCriticalRow(player);
-    if (!criticalRow) return false;
-
-    return criticalRow.find(square => this.board.squares[square].isUnused());
-  }
-
   play() {
     this.displayWelcomeMessage();
 
@@ -252,6 +234,24 @@ class TTTGame {
     return TTTGame.POSSIBLE_WINNING_ROWS.some(row => {
       return this.board.countMarkersFor(player, row) === 3;
     });
+  }
+
+  findCriticalRow(player) {
+    return TTTGame.POSSIBLE_WINNING_ROWS.find(row => {
+      if ((this.board.countMarkersFor(player, row) === 2) &&
+          row.some(square => this.board.squares[square].isUnused())) {
+            return true;
+          }
+
+      return false;
+    });
+  }
+
+  findCriticalSquare(player) {
+    let criticalRow = this.findCriticalRow(player);
+    if (!criticalRow) return false;
+
+    return criticalRow.find(square => this.board.squares[square].isUnused());
   }
 
   humanMoves() {
