@@ -169,7 +169,6 @@ class TTTGame {
 
   findCriticalRow(player) {
     return TTTGame.POSSIBLE_WINNING_ROWS.find(row => {
-      // return this.board.countMarkersFor(player, row) === 2;
       if ((this.board.countMarkersFor(player, row) === 2) &&
           row.some(square => this.board.squares[square].isUnused())) {
             return true;
