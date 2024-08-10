@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* Description
 - Tic Tac Toe is a 2-player board game.
 
@@ -166,6 +167,25 @@ class TTTGame {
     this.computer = new Computer();
   }
 
+  findCriticalRow(player) {
+    return TTTGame.POSSIBLE_WINNING_ROWS.find(row => {
+      // return this.board.countMarkersFor(player, row) === 2;
+      if ((this.board.countMarkersFor(player, row) === 2) &&
+          row.some(square => this.board.squares[square].isUnused())) {
+            return true;
+          }
+
+      return false;
+    });
+  }
+
+  findCriticalSquare(player) {
+    let criticalRow = this.findCriticalRow(player);
+    if (!criticalRow) return false;
+
+    return criticalRow.find(square => this.board.squares[square].isUnused());
+  }
+
   play() {
     this.displayWelcomeMessage();
 
@@ -267,7 +287,11 @@ class TTTGame {
     let choice;
 
     do {
-      choice = String(Math.floor((9 * Math.random()) + 1));
+      if (this.findCriticalSquare(this.human)) {
+        choice = this.findCriticalSquare(this.human);
+      } else {
+        choice = String(Math.floor((9 * Math.random()) + 1));
+      }
     } while (!validChoices.includes(choice));
 
     this.board.markSquareAt(choice, this.computer.getMarker());
