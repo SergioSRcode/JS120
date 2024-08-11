@@ -254,6 +254,10 @@ class TTTGame {
     return criticalRow.find(square => this.board.squares[square].isUnused());
   }
 
+  winningSquareExists(player) {
+    return !!this.findWinningSquare(player);
+  }
+
   humanMoves() {
     let choice;
 
@@ -286,7 +290,9 @@ class TTTGame {
     let choice;
 
     do {
-      if (this.findWinningSquare(this.human)) {
+      if (this.winningSquareExists(this.computer)) {
+        choice = this.findWinningSquare(this.computer);
+      } else if (this.winningSquareExists(this.human)) {
         choice = this.findWinningSquare(this.human);
       } else {
         choice = String(Math.floor((9 * Math.random()) + 1));
