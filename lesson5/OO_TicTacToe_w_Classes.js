@@ -247,7 +247,7 @@ class TTTGame {
     });
   }
 
-  findCriticalSquare(player) {
+  findWinningSquare(player) {
     let criticalRow = this.findCriticalRow(player);
     if (!criticalRow) return false;
 
@@ -286,8 +286,8 @@ class TTTGame {
     let choice;
 
     do {
-      if (this.findCriticalSquare(this.human)) {
-        choice = this.findCriticalSquare(this.human);
+      if (this.findWinningSquare(this.human)) {
+        choice = this.findWinningSquare(this.human);
       } else {
         choice = String(Math.floor((9 * Math.random()) + 1));
       }
