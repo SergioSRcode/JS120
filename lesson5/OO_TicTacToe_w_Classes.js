@@ -207,17 +207,15 @@ class TTTGame {
     this.displayGoodbyeMessage();
   }
 
-  playRound() {
-    this.displayWelcomeMessage();
+  playMatch() {
+    this.displayWelcomeToRoundMessage();
 
     do {
       this.play1Game();
+      if (this.matchIsWon() || !this.playAgain()) break;
     } while (!this.matchIsWon());
 
-    // while (!this.matchIsWon()) {
-    //   this.play1Game();
-    // }
-
+    this.displayMatchResult();
     this.displayGoodbyeMessage();
   }
 
@@ -261,8 +259,32 @@ class TTTGame {
     console.log("");
   }
 
+  displayWelcomeToRoundMessage() {
+    console.clear();
+    console.log("Welcome to Tic Tac Toe!");
+    console.log(`**Best of ${this.scoreBoard.winningScore}**`);
+    console.log("");
+  }
+
   displayGoodbyeMessage() {
     console.log("Thanks for playing Tic Tac Toe! Goodbye!");
+  }
+
+  displayMatchResult() {
+    console.clear();
+    this.board.display();
+
+    if (this.scoreBoard.humanScore === this.scoreBoard.winningScore) {
+      console.log(`Congrats! You won the "Best of ${this.scoreBoard.winningScore}!!`);
+    } else if (this.scoreBoard.computerScore === this.scoreBoard.winningScore) {
+      console.log("I won the match! Now I will turn human, muhahaha!");
+    } else {
+      console.log("Hey! You can't run from AI!");
+    }
+
+    console.log("");
+    console.log("Final Score: ");
+    this.scoreBoard.display();
   }
 
   displayResults() {
@@ -375,7 +397,7 @@ class TTTGame {
   }
 
   matchIsWon() {
-    console.clear();
+    // console.clear();
     return this.scoreBoard.humanScore === this.scoreBoard.winningScore ||
            this.scoreBoard.computerScore === this.scoreBoard.winningScore;
   }
@@ -390,5 +412,5 @@ class TTTGame {
 
 let game = new TTTGame();
 // game.play();
-game.playRound();
+game.playMatch();
 // game.incrementAndShow();
