@@ -157,7 +157,9 @@ class ScoreBoard {
   }
 
   display() {
+    console.log("");
     console.log(`Human: ${this.humanScore} | Computer: ${this.computerScore}`);
+    console.log("");
   }
 
   incrementScore(player) {
@@ -206,9 +208,17 @@ class TTTGame {
   }
 
   playRound() {
-    while (!this.matchIsWon()) {
+    this.displayWelcomeMessage();
+
+    do {
       this.play1Game();
-    }
+    } while (!this.matchIsWon());
+
+    // while (!this.matchIsWon()) {
+    //   this.play1Game();
+    // }
+
+    this.displayGoodbyeMessage();
   }
 
   play1Game() {
@@ -224,6 +234,7 @@ class TTTGame {
       if (this.gameOver()) break;
 
       this.board.displayWithClear();
+      this.scoreBoard.display();
     }
 
     this.board.displayWithClear();
@@ -364,6 +375,7 @@ class TTTGame {
   }
 
   matchIsWon() {
+    console.clear();
     return this.scoreBoard.humanScore === this.scoreBoard.winningScore ||
            this.scoreBoard.computerScore === this.scoreBoard.winningScore;
   }
@@ -377,5 +389,6 @@ class TTTGame {
 }
 
 let game = new TTTGame();
-game.play();
+// game.play();
+game.playRound();
 // game.incrementAndShow();
