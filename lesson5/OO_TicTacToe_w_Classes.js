@@ -161,7 +161,7 @@ class ScoreBoard {
   }
 
   incrementScore(player) {
-    if (player === this.human) {
+    if (player.constructor.name === "Human") {
       this.humanScore += 1;
     } else {
       this.computerScore += 1;
@@ -205,9 +205,16 @@ class TTTGame {
     this.displayGoodbyeMessage();
   }
 
+  playRound() {
+    while (!this.matchIsWon()) {
+      this.play1Game();
+    }
+  }
+
   play1Game() {
     this.board.reset();
     this.board.display();
+    this.scoreBoard.display();
 
     while (true) {
       this.humanMoves();
@@ -220,6 +227,8 @@ class TTTGame {
     }
 
     this.board.displayWithClear();
+    this.calculateScore();
+    this.scoreBoard.display();
     this.displayResults();
   }
 
@@ -256,6 +265,14 @@ class TTTGame {
     } else {
       console.log("A tie. Next time I will make you sink like the Tie-tanic!");
     }
+  }
+
+  calculateScore() {
+    if (this.isWinner(this.human)) {
+      this.scoreBoard.incrementScore(this.human);
+     } else if (this.isWinner(this.computer)) {
+      this.scoreBoard.incrementScore(this.computer);
+     }
   }
 
   isWinner(player) {
@@ -351,14 +368,14 @@ class TTTGame {
            this.scoreBoard.computerScore === this.scoreBoard.winningScore;
   }
 // for testing purposes
-  incrementAndShow() {
-    do {
-      this.scoreBoard.incrementScore(this.computer);
-      this.scoreBoard.display();
-    } while (!this.matchIsWon());
-  }
+//   incrementAndShow() {
+//     do {
+//       this.scoreBoard.incrementScore(this.computer);
+//       this.scoreBoard.display();
+//     } while (!this.matchIsWon());
+//   }
 }
 
 let game = new TTTGame();
-// game.play();
-game.incrementAndShow();
+game.play();
+// game.incrementAndShow();
