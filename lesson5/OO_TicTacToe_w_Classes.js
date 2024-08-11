@@ -156,7 +156,7 @@ class ScoreBoard {
     this.computerScore = 0;
   }
 
-  displayScore() {
+  display() {
     console.log(`Human: ${this.humanScore} | Computer: ${this.computerScore}`);
   }
 
@@ -354,7 +354,7 @@ class TTTGame {
   incrementAndShow() {
     do {
       this.scoreBoard.incrementScore(this.computer);
-      this.scoreBoard.displayScore();
+      this.scoreBoard.display();
     } while (!this.matchIsWon());
   }
 }
