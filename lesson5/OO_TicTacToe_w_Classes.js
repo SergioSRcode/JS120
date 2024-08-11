@@ -161,6 +161,8 @@ class TTTGame {
     [ "3", "5", "7" ],            // diagonal: bottom-left to top-right
   ];
 
+  static CENTER_SQUARE = "5";
+
   constructor() {
     this.board = new Board();
     this.human = new Human();
@@ -289,17 +291,25 @@ class TTTGame {
     let validChoices = this.board.unusedSquares();
     let choice;
 
+    choice = this.findComputerChoice(validChoices, choice);
+
+    this.board.markSquareAt(choice, this.computer.getMarker());
+  }
+
+  findComputerChoice(validChoices, choice) {
     do {
       if (this.winningSquareExists(this.computer)) {
         choice = this.findWinningSquare(this.computer);
       } else if (this.winningSquareExists(this.human)) {
         choice = this.findWinningSquare(this.human);
+      } else if (validChoices.includes(TTTGame.CENTER_SQUARE)) {
+        choice = TTTGame.CENTER_SQUARE;
       } else {
         choice = String(Math.floor((9 * Math.random()) + 1));
       }
     } while (!validChoices.includes(choice));
 
-    this.board.markSquareAt(choice, this.computer.getMarker());
+    return choice;
   }
 
   gameOver() {
