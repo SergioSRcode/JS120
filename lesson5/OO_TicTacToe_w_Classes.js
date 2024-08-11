@@ -1,46 +1,4 @@
 /* eslint-disable indent */
-/* Description
-- Tic Tac Toe is a 2-player board game.
-
-- The board is a 3x3 grid.
-
-- Players take turns marking a square with a marker that identifies the player.
-
-- Traditionally, the player to go first uses the marker X to mark her squares,
-and the player to go second uses the marker O.
-
-- The first player to mark 3 squares in a row with her marker wins the game.
-
-- A row can be a horizontal row, a vertical column,or either of the two
-diagonals (top-left to bottom-right and top-right to bottom-left).
-
-- There is one human player and one computer player.
-
-- The human player always moves (places a marker) first in the initial version
-of our game; you can change that later.
-
-
-Nouns: Game, Player, Human, Computer, Board, Marker, Row, Square
-Verbs: play, mark
-
-
-Organize:
-
-Game (n)
-- play
-
-Player (n)
-- Human (n)
-- Computer (n)
-- mark (v)
-- play (v)
-
-Board (n)
-Marker (n)
-Row (n)
-Square (n)
-
-*/
 let readline = require("readline-sync");
 
 class Square {
@@ -170,7 +128,7 @@ class ScoreBoard {
     }
   }
 
-  resetScore() {
+  resetScore() {  // can be preserved in case it is needed upon revamping the program
     this.humanScore = 0;
     this.computerScore = 0;
   }
@@ -198,7 +156,7 @@ class TTTGame {
     this.switchTurns = true;
   }
 
-  play() {
+  play() {  // can be preserved for a different use case
     this.displayWelcomeMessage();
 
     do {
@@ -383,7 +341,7 @@ class TTTGame {
     } else if (this.isWinner(this.computer)) {
       console.log("I won! I won! Take that, human! The revolution is upon us!");
     } else {
-      console.log("A tie. Next time I will make you sink like the Tie-tanic!");
+      console.log("A tie. Let me untie this next round!");
     }
   }
 
@@ -438,6 +396,5 @@ class TTTGame {
 }
 
 let game = new TTTGame();
-// game.play();
 game.playMatch();
-// game.incrementAndShow();
+
