@@ -195,6 +195,7 @@ class TTTGame {
     this.human = new Human();
     this.computer = new Computer();
     this.scoreBoard = new ScoreBoard();
+    this.switchTurns = true;
   }
 
   play() {
@@ -224,6 +225,23 @@ class TTTGame {
     this.board.display();
     this.scoreBoard.display();
 
+    this.playersTakeTurnsGoingFirst();
+
+    this.board.displayWithClear();
+    this.calculateScore();
+    this.scoreBoard.display();
+    this.displayResults();
+  }
+
+  playersTakeTurnsGoingFirst() {
+    if (this.switchTurns) {
+      this.humanGoesFirst();
+      } else {
+      this.computerGoesFirst();
+    }
+  }
+
+  humanGoesFirst() {
     while (true) {
       this.humanMoves();
       if (this.gameOver()) break;
@@ -234,11 +252,80 @@ class TTTGame {
       this.board.displayWithClear();
       this.scoreBoard.display();
     }
+    this.switchTurnOrder();
+  }
 
-    this.board.displayWithClear();
-    this.calculateScore();
-    this.scoreBoard.display();
-    this.displayResults();
+  computerGoesFirst() {
+    while (true) {
+      this.computerMoves();
+      if (this.gameOver()) break;
+
+      this.board.displayWithClear();
+      this.scoreBoard.display();
+
+      this.humanMoves();
+      if (this.gameOver()) break;
+
+      this.board.displayWithClear();
+      this.scoreBoard.display();
+    }
+    this.switchTurnOrder();
+  }
+
+  humanMoves() {
+    let choice;
+
+    while (true) {
+      let validChoices = this.board.unusedSquares();
+      const prompt = `Choose a square(${TTTGame.joinOr(validChoices, ", ")}):\n`;
+      choice = readline.question(prompt);
+
+      if (validChoices.includes(choice)) break;
+
+      console.log("Sorry, that's not a valid choice.");
+      console.log("");
+    }
+
+    this.board.markSquareAt(choice, this.human.getMarker());
+  }
+
+  static joinOr(arr, separator = ", ", connector = "or") {
+    if (arr.length === 1) return arr[0];
+
+    arr = arr.slice();
+    let lastChar = " " + connector + " " + arr.pop();
+    let str = arr.join(separator);
+
+    return str + lastChar;
+  }
+
+  computerMoves() {
+    let validChoices = this.board.unusedSquares();
+    let choice;
+
+    choice = this.findComputerChoice(validChoices, choice);
+
+    this.board.markSquareAt(choice, this.computer.getMarker());
+  }
+
+  findComputerChoice(validChoices, choice) {
+    do {
+      if (this.winningSquareExists(this.computer)) {
+        choice = this.findWinningSquare(this.computer);
+      } else if (this.winningSquareExists(this.human)) {
+        choice = this.findWinningSquare(this.human);
+      } else if (validChoices.includes(TTTGame.CENTER_SQUARE)) {
+        choice = TTTGame.CENTER_SQUARE;
+      } else {
+        choice = String(Math.floor((9 * Math.random()) + 1));
+      }
+    } while (!validChoices.includes(choice));
+
+    return choice;
+  }
+
+  switchTurnOrder() {
+    this.switchTurns = !this.switchTurns;
   }
 
   playAgain() {
@@ -336,78 +423,18 @@ class TTTGame {
     return !!this.findWinningSquare(player);
   }
 
-  humanMoves() {
-    let choice;
-
-    while (true) {
-      let validChoices = this.board.unusedSquares();
-      const prompt = `Choose a square(${TTTGame.joinOr(validChoices, ", ")}):\n`;
-      choice = readline.question(prompt);
-
-      if (validChoices.includes(choice)) break;
-
-      console.log("Sorry, that's not a valid choice.");
-      console.log("");
-    }
-
-    this.board.markSquareAt(choice, this.human.getMarker());
-  }
-
-  static joinOr(arr, separator = ", ", connector = "or") {
-    if (arr.length === 1) return arr[0];
-
-    arr = arr.slice();
-    let lastChar = " " + connector + " " + arr.pop();
-    let str = arr.join(separator);
-
-    return str + lastChar;
-  }
-
-  computerMoves() {
-    let validChoices = this.board.unusedSquares();
-    let choice;
-
-    choice = this.findComputerChoice(validChoices, choice);
-
-    this.board.markSquareAt(choice, this.computer.getMarker());
-  }
-
-  findComputerChoice(validChoices, choice) {
-    do {
-      if (this.winningSquareExists(this.computer)) {
-        choice = this.findWinningSquare(this.computer);
-      } else if (this.winningSquareExists(this.human)) {
-        choice = this.findWinningSquare(this.human);
-      } else if (validChoices.includes(TTTGame.CENTER_SQUARE)) {
-        choice = TTTGame.CENTER_SQUARE;
-      } else {
-        choice = String(Math.floor((9 * Math.random()) + 1));
-      }
-    } while (!validChoices.includes(choice));
-
-    return choice;
+  someoneWon() {
+    return this.isWinner(this.human) || this.isWinner(this.computer);
   }
 
   gameOver() {
     return this.board.isFull() || this.someoneWon();
   }
 
-  someoneWon() {
-    return this.isWinner(this.human) || this.isWinner(this.computer);
-  }
-
   matchIsWon() {
-    // console.clear();
     return this.scoreBoard.humanScore === this.scoreBoard.winningScore ||
            this.scoreBoard.computerScore === this.scoreBoard.winningScore;
   }
-// for testing purposes
-//   incrementAndShow() {
-//     do {
-//       this.scoreBoard.incrementScore(this.computer);
-//       this.scoreBoard.display();
-//     } while (!this.matchIsWon());
-//   }
 }
 
 let game = new TTTGame();
