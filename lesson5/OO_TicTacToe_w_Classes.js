@@ -268,17 +268,17 @@ class TTTGame {
   }
 
   findComputerChoice(validChoices, choice) {
-    do {
-      if (this.winningSquareExists(this.computer)) {
-        choice = this.findWinningSquare(this.computer);
-      } else if (this.winningSquareExists(this.human)) {
-        choice = this.findWinningSquare(this.human);
-      } else if (validChoices.includes(Board.CENTER_SQUARE)) {
-        choice = Board.CENTER_SQUARE;
-      } else {
+    if (this.winningSquareExists(this.computer)) {
+      choice = this.findWinningSquare(this.computer);
+    } else if (this.winningSquareExists(this.human)) {
+      choice = this.findWinningSquare(this.human);
+    } else if (validChoices.includes(Board.CENTER_SQUARE)) {
+      choice = Board.CENTER_SQUARE;
+    } else {
+      do {
         choice = String(Math.floor((9 * Math.random()) + 1));
-      }
-    } while (!validChoices.includes(choice));
+      } while (!validChoices.includes(choice));
+    }
 
     return choice;
   }
