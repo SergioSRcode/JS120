@@ -28,6 +28,9 @@ class Square {
 }
 
 class Board {
+  static CENTER_SQUARE = "5";
+  static LAST_SQUARE = 9;
+
   constructor() {
     this.reset();
   }
@@ -35,7 +38,7 @@ class Board {
   reset() {
     this.squares = {};
 
-    for (let counter = 1; counter <= 9; ++counter) {
+    for (let counter = 1; counter <= Board.LAST_SQUARE; ++counter) {
       this.squares[counter] = new Square(counter);
     }
   }
@@ -145,8 +148,6 @@ class TTTGame {
     [ "1", "5", "9" ],            // diagonal: top-left to bottom-right
     [ "3", "5", "7" ],            // diagonal: bottom-left to top-right
   ];
-
-  static CENTER_SQUARE = "5";
 
   constructor() {
     this.board = new Board();
@@ -272,8 +273,8 @@ class TTTGame {
         choice = this.findWinningSquare(this.computer);
       } else if (this.winningSquareExists(this.human)) {
         choice = this.findWinningSquare(this.human);
-      } else if (validChoices.includes(TTTGame.CENTER_SQUARE)) {
-        choice = TTTGame.CENTER_SQUARE;
+      } else if (validChoices.includes(Board.CENTER_SQUARE)) {
+        choice = Board.CENTER_SQUARE;
       } else {
         choice = String(Math.floor((9 * Math.random()) + 1));
       }
