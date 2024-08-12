@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 let readline = require("readline-sync");
 
 class Square {
@@ -195,7 +194,7 @@ class TTTGame {
   playersTakeTurnsGoingFirst() {
     if (this.switchTurns) {
       this.humanGoesFirst();
-      } else {
+    } else {
       this.computerGoesFirst();
     }
   }
@@ -268,10 +267,13 @@ class TTTGame {
   }
 
   findComputerChoice(validChoices, choice) {
-    if (this.winningSquareExists(this.computer)) {
-      choice = this.findWinningSquare(this.computer);
-    } else if (this.winningSquareExists(this.human)) {
-      choice = this.findWinningSquare(this.human);
+    let winningSquareComputer = this.findWinningSquare(this.computer);
+    let winningSquareHuman = this.findWinningSquare(this.human);
+
+    if (winningSquareComputer) {
+      choice = winningSquareComputer;
+    } else if (winningSquareHuman) {
+      choice = winningSquareHuman;
     } else if (validChoices.includes(Board.CENTER_SQUARE)) {
       choice = Board.CENTER_SQUARE;
     } else {
@@ -349,9 +351,9 @@ class TTTGame {
   calculateScore() {
     if (this.isWinner(this.human)) {
       this.scoreBoard.incrementScore(this.human);
-     } else if (this.isWinner(this.computer)) {
+    } else if (this.isWinner(this.computer)) {
       this.scoreBoard.incrementScore(this.computer);
-     }
+    }
   }
 
   isWinner(player) {
@@ -364,8 +366,8 @@ class TTTGame {
     return TTTGame.POSSIBLE_WINNING_ROWS.find(row => {
       if ((this.board.countMarkersFor(player, row) === 2) &&
           row.some(square => this.board.squares[square].isUnused())) {
-            return true;
-          }
+        return true;
+      }
 
       return false;
     });
@@ -378,7 +380,7 @@ class TTTGame {
     return criticalRow.find(square => this.board.squares[square].isUnused());
   }
 
-  winningSquareExists(player) {
+  winningSquareExists(player) {  // returns a simple boolean
     return !!this.findWinningSquare(player);
   }
 
