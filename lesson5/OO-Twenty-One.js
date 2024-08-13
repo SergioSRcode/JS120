@@ -74,10 +74,20 @@ You can either create a new deck for each game,
 or keep track of how many cards remain and create a new deck as needed.
 */
 
+class Card {
+  constructor(suit, rank) {
+    this.rank = rank;
+    this.suit = suit;
+    // this.points = null;  // maybe for participants?
+  }
+}
 
 class Deck {
-  constructor() {
+  static ACE = "A";
+  static FACE10 = ["J", "Q", "K"];
 
+  constructor() {
+    this.cards = this.initializeDeck();
     //STUB
     // what state is needed?
     // 52 cards?
@@ -116,22 +126,11 @@ class Deck {
 
     return this.shuffle(deck);
   }
-}
-
-class Card {
-  constructor() {
-    this.deck = new Deck();  // necessary?
-    this.ace = "A";
-    this.face10 = ["J", "Q", "K"];
-    //STUB
-    // What state is needed for a card?
-    // Rank? Suit? Points?
-    // extends deck?
-  }
 
   draw() {
     //STUB
-    // draw card from deck
+    let newCard = this.cards.pop();
+    return new Card(...newCard);
   }
 }
 
@@ -169,7 +168,7 @@ class Player extends Participant {
 }
 
 class Dealer extends Participant {
-  // Very similar to a Player; do we need this?
+  static MINIMUM_TOTAL_VALUE = 17;
 
   constructor() {
     super();
@@ -186,14 +185,20 @@ class Dealer extends Participant {
     //STUB
   }
 
-  deal() {
-    //STUB
-    // does the dealer or the deck deal?
-  }
+  // deal() {
+  //   //STUB
+  //   // does the dealer or the deck deal?
+  // }
 }
 
 class TwentyOneGame {
+  static HIT_OR_STAY = {hit: ["hit", "h"], stay: ["stay", "s"]};
+  static TOTAL_VALUE_LIMIT = 21;
+
   constructor() {
+    this.deck = new Deck();
+    this.player = new Player();
+    this.dealer = new Dealer();
     //STUB
     // state?
     // e.g. a Deck? Two participants?
@@ -202,8 +207,8 @@ class TwentyOneGame {
   start() {
     //SPIKE
     this.displayWelcomeMessage();
-    // this.dealCards();
-    // this.showCards();
+    this.dealCards();
+    this.showCards();
     // this.playerTurn();
     // this.dealerTurn();
     // this.displayResult();
@@ -242,5 +247,7 @@ class TwentyOneGame {
   }
 }
 
-let twenty1Game = new TwentyOneGame();
-twenty1Game.start();
+// let twenty1Game = new TwentyOneGame();
+// twenty1Game.start();
+let deck = new Deck();
+console.log(deck.draw());
