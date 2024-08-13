@@ -139,6 +139,7 @@ class Deck {
 class Participant {
   constructor() {
     this.hand = [];
+    this.score = 0;
     //STUB
     // state that both participants share?
     // e.g. Score, Hand, money available?
@@ -151,22 +152,41 @@ class Participant {
     // console.log(this.hand);  // remove later
   }
 
-  displayHand() {
-    console.log("");
-    console.log(this.hand.join(", "));
-  }
-
   stay() {
     //STUB
-    console.log("stay");
+    console.log("");
+    console.log("You chose 'Stay'!");
+    this.displayHandValue();
+  }
+
+  displayHandValue() {
+    console.log("");
+    console.log("Your current value is:");
+    console.log(this.score);
   }
 
   isBusted() {
     //STUB
   }
 
-  score() {
-    //STUB
+  calculateScore() {
+    let handValues = this.hand.map(card => {
+      let arr = card.split(" ");
+      if (Deck.FACE10.includes(arr[1])) return 10;
+      if (Deck.ACE.includes(arr[1])) return 11;
+
+      return Number(arr[1]);
+    });
+
+    let acesInHand = handValues.filter(val => val === 11).length;
+    let rawScore = handValues.reduce((acc, num) => acc + num, 0);
+
+    while (acesInHand > 1) {
+      rawScore -= 10;
+      acesInHand -= 1;
+    }
+
+    this.score = rawScore;
   }
 }
 
@@ -259,9 +279,12 @@ class TwentyOneGame {
     while (playerMove[0] === "h") {
       this.player.hit(this.player.hand, this.deck);
       // this.player.displayHand();
+      this.player.calculateScore();
       this.showCards();
       playerMove = this.getPlayerMove();
     }
+
+    this.player.calculateScore();
 
     if (playerMove[0] === "s") this.player.stay();
   }
