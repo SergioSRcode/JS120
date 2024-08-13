@@ -78,6 +78,7 @@ class Card {
   constructor(suit, rank) {
     this.rank = rank;
     this.suit = suit;
+    this.name = suit + " " + rank;
     // this.points = null;  // maybe for participants?
   }
 }
@@ -212,15 +213,24 @@ class TwentyOneGame {
     // this.playerTurn();
     // this.dealerTurn();
     // this.displayResult();
-    this.displayGoodbyeMessage();
+    // this.displayGoodbyeMessage();
   }
 
   dealCards() {
     //STUB
+    while (this.player.hand.length < 2) {
+      this.player.hand.push(this.deck.draw().name);
+      this.dealer.hand.push(this.deck.draw().name);
+    }
   }
 
   showCards() {
-    //STUB
+    console.log(`Dealer cards: 
+  ${this.dealer.hand[0]}, N.N.`);
+    console.log("");
+    console.log("");
+    console.log(`Your cards:
+    ${this.player.hand.join(", ")}`);
   }
 
   playerTurn() {
@@ -247,7 +257,7 @@ class TwentyOneGame {
   }
 }
 
-// let twenty1Game = new TwentyOneGame();
-// twenty1Game.start();
-let deck = new Deck();
-console.log(deck.draw());
+let twenty1Game = new TwentyOneGame();
+twenty1Game.start();
+// let deck = new Deck();
+// console.log(deck.draw());
