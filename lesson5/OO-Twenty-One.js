@@ -232,6 +232,7 @@ class TwentyOneGame {
   }
 
   showCards() {
+    console.clear();
     console.log(`Dealer cards: 
   ${this.dealer.hand[0]}, N.N.`);
     console.log("");
@@ -257,7 +258,8 @@ class TwentyOneGame {
 
     while (playerMove[0] === "h") {
       this.player.hit(this.player.hand, this.deck);
-      this.player.displayHand();
+      // this.player.displayHand();
+      this.showCards();
       playerMove = this.getPlayerMove();
     }
 
