@@ -73,6 +73,7 @@ Be prepared to run out of cards.
 You can either create a new deck for each game,
 or keep track of how many cards remain and create a new deck as needed.
 */
+const readline = require("readline-sync");
 
 class Card {
   constructor(suit, rank) {
@@ -233,8 +234,21 @@ class TwentyOneGame {
   ${this.player.hand.join(", ")}`);
   }
 
+  getPlayerMove() {
+    let hitOrStay;
+
+    while (!TwentyOneGame.HIT_OR_STAY.includes(hitOrStay)) {
+      hitOrStay = readline.question("Do you 'hit' (h) or 'stay' (s)").toLowerCase();
+    }
+
+    return hitOrStay;
+  }
+
   playerTurn() {
-    //STUB
+    //SPIKE
+    let playerMove = this.getPlayerMove();
+    if (playerMove[0] === "h") this.player.hit();
+    if (playerMove[0] === "s") this.player.stay();
   }
 
   dealerTurn() {
