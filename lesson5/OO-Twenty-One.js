@@ -230,7 +230,7 @@ class TwentyOneGame {
     console.log("");
     console.log("");
     console.log(`Your cards:
-    ${this.player.hand.join(", ")}`);
+  ${this.player.hand.join(", ")}`);
   }
 
   playerTurn() {
