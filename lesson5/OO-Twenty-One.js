@@ -142,7 +142,7 @@ class Participant {
     hand.push(newCard);
   }
 
-  stay() {
+  stay() {  // needs check
     console.log("");
     console.log(`=> ${this.constructor.name} chose "Stay"!`);
     this.displayHandValue();
