@@ -148,6 +148,7 @@ class Participant {
     //STUB
     let newCard = deck.draw().name;
     hand.push(newCard);
+    // console.log(this.hand);  // remove later
   }
 
   stay() {
@@ -248,8 +249,12 @@ class TwentyOneGame {
 
   playerTurn() {
     let playerMove = this.getPlayerMove();
-    // while "h" => continue drawing
-    if (playerMove[0] === "h") this.player.hit(this.player.hand, this.deck);
+
+    while (playerMove[0] === "h") {
+      this.player.hit(this.player.hand, this.deck);
+      playerMove = this.getPlayerMove();
+    }
+
     if (playerMove[0] === "s") this.player.stay();
   }
 
