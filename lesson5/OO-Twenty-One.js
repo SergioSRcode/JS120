@@ -140,20 +140,18 @@ class Participant {
   constructor() {
     this.hand = [];
     this.score = 0;
+    this.busted = false;
     //STUB
     // state that both participants share?
     // e.g. Score, Hand, money available?
   }
 
   hit(hand, deck) {
-    //STUB
     let newCard = deck.draw().name;
     hand.push(newCard);
-    // console.log(this.hand);  // remove later
   }
 
   stay() {
-    //STUB
     console.log("");
     console.log("You chose 'Stay'!");
     this.displayHandValue();
@@ -163,10 +161,6 @@ class Participant {
     console.log("");
     console.log("Your current value is:");
     console.log(this.score);
-  }
-
-  isBusted() {
-    //STUB
   }
 
   calculateScore() {
@@ -237,7 +231,14 @@ class TwentyOneGame {
     this.dealCards();
     this.showCards();
     this.playerTurn();
-    // this.player.displayHand();
+    if (this.player.busted) {
+      console.log("");
+      console.log(`You busted with ${this.player.score}, Dealer wins!`);
+      // this.displayResult();
+      // this.displayGoodbyeMessage();
+    } else {
+      // this.dealerTurn();
+    }
     // this.dealerTurn();
     // this.displayResult();
     // this.displayGoodbyeMessage();
@@ -257,8 +258,12 @@ class TwentyOneGame {
   ${this.dealer.hand[0]}, N.N.`);
     console.log("");
     console.log("");
-    console.log(`Your cards:
+    console.log(`Player cards:
   ${this.player.hand.join(", ")}`);
+  }
+
+  isBusted(score) {
+    return score > TwentyOneGame.TOTAL_VALUE_LIMIT;
   }
 
   getPlayerMove() {
@@ -274,17 +279,19 @@ class TwentyOneGame {
   }
 
   playerTurn() {
+    this.player.calculateScore();
+    this.player.displayHandValue();
     let playerMove = this.getPlayerMove();
 
     while (playerMove[0] === "h") {
       this.player.hit(this.player.hand, this.deck);
-      // this.player.displayHand();
       this.player.calculateScore();
       this.showCards();
+
+      if (this.isBusted(this.player.score)) break;
       playerMove = this.getPlayerMove();
     }
-
-    this.player.calculateScore();
+    if (this.isBusted(this.player.score)) this.player.busted = true;
 
     if (playerMove[0] === "s") this.player.stay();
   }
