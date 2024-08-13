@@ -74,16 +74,10 @@ You can either create a new deck for each game,
 or keep track of how many cards remain and create a new deck as needed.
 */
 
-class Card {
-  constructor() {
-    //STUB
-    // What state is needed for a card?
-    // Rank? Suit? Points?
-  }
-}
 
 class Deck {
   constructor() {
+
     //STUB
     // what state is needed?
     // 52 cards?
@@ -95,21 +89,58 @@ class Deck {
     //STUB
     // does the Dealer or the Deck deal?
   }
+
+  shuffle(deck) {
+    for (let index = deck.length - 1; index > 0; index--) {
+      let otherIndex = Math.floor(Math.random() * (index + 1));  // num between 0 and index
+      [deck[index], deck[otherIndex]] = [deck[otherIndex], deck[index]];  //swap cards
+    }
+    return deck;
+  }
+
+  initializeDeck() {
+    let deck = [];
+
+    for (let cards = 1; cards <= 52; cards++) {
+      if (cards <= 13) deck.push(["H", String(cards + 1)]);
+      if (cards > 13 && cards <= 26) deck.push(["D", String(cards + 1 - 13)]);
+      if (cards > 26 && cards <= 39) deck.push(["C", String(cards + 1 - 26)]);
+      if (cards > 39 && cards <= 52) deck.push(["S", String(cards + 1 - 39)]);
+    }
+    deck.forEach(card => {
+      if (card[1] === "11") card[1] = "J";
+      if (card[1] === "12") card[1] = "Q";
+      if (card[1] === "13") card[1] = "K";
+      if (card[1] === "14") card[1] = "A";
+    });
+
+    return this.shuffle(deck);
+  }
+}
+
+class Card {
+  constructor() {
+    this.deck = new Deck();  // necessary?
+    this.ace = "A";
+    this.face10 = ["J", "Q", "K"];
+    //STUB
+    // What state is needed for a card?
+    // Rank? Suit? Points?
+    // extends deck?
+  }
+
+  draw() {
+    //STUB
+    // draw card from deck
+  }
 }
 
 class Participant {
   constructor() {
+    this.hand = [];
     //STUB
     // state that both participants share?
     // e.g. Score, Hand, money available?
-  }
-}
-
-class Player extends Participant {
-  constructor() {
-    super();
-    //STUB
-    // state that only belongs to Player
   }
 
   hit() {
@@ -126,6 +157,14 @@ class Player extends Participant {
 
   score() {
     //STUB
+  }
+}
+
+class Player extends Participant {
+  constructor() {
+    super();
+    //STUB
+    // state that only belongs to Player
   }
 }
 
@@ -137,22 +176,6 @@ class Dealer extends Participant {
     //STUB
     // What sort of state does a dealer need?
     // Score? Hand? Deck of cards? Bow tie?
-  }
-
-  hit() {
-    //STUB
-  }
-
-  stay() {
-    //STUB
-  }
-
-  isBusted() {
-    //STUB
-  }
-
-  score() {
-    //STUB
   }
 
   hide() {
@@ -179,11 +202,11 @@ class TwentyOneGame {
   start() {
     //SPIKE
     this.displayWelcomeMessage();
-    this.dealCards();
-    this.showCards();
-    this.playerTurn();
-    this.dealerTurn();
-    this.displayResult();
+    // this.dealCards();
+    // this.showCards();
+    // this.playerTurn();
+    // this.dealerTurn();
+    // this.displayResult();
     this.displayGoodbyeMessage();
   }
 
@@ -204,11 +227,14 @@ class TwentyOneGame {
   }
 
   displayWelcomeMessage() {
-    //STUB
+    console.clear();
+    console.log("Welcome to Twenty-One!");
+    console.log("");
   }
 
   displayGoodbyeMessage() {
-    //STUB
+    console.clear();
+    console.log("Thanks for playing!");
   }
 
   displayResult() {
