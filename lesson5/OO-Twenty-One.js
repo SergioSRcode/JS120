@@ -1,3 +1,5 @@
+/* eslint-disable max-statements */
+/* eslint-disable max-lines-per-function */
 /* eslint-disable max-len */
 /* Description
 
@@ -142,7 +144,7 @@ class Participant {
 
   stay() {
     console.log("");
-    console.log(`${this.constructor.name} chose "Stay"!`);
+    console.log(`=> ${this.constructor.name} chose "Stay"!`);
     this.displayHandValue();
   }
 
@@ -199,10 +201,18 @@ class Dealer extends Participant {
   }
 
   hit(hand, deck) {
-    console.log("Dealer chose 'hit!");
+    console.log("=> Dealer chose 'hit!");
     console.log("");
     let newCard = deck.draw().name;
     hand.push(newCard);
+  }
+
+  stay() {
+    console.clear();
+    this.showCards();
+    this.displayHandValue();
+    console.log(`
+=> ${this.constructor.name} chose "Stay"!`);
   }
 }
 
@@ -214,28 +224,32 @@ class TwentyOneGame {
     this.deck = new Deck();
     this.player = new Player();
     this.dealer = new Dealer();
-    //STUB
-    // state?
-    // e.g. a Deck? Two participants?
   }
 
   start() {
-    //SPIKE
     this.displayWelcomeMessage();
-    this.dealCards();
-    this.showCards();
-    this.playerTurn();
-    if (this.player.busted) {
-      console.log("");
-      console.log(`You busted with ${this.player.score}!`);
-    } else {
-      this.dealerTurn();
-      if (this.dealer.busted) {
-        console.log("Dealer busted!");
+    do {
+      this.deck = new Deck();
+      this.resetParticipants();
+      this.dealCards();
+      this.showCards();
+      this.playerTurn();
+
+      if (this.player.busted) {
+        console.clear();
+        console.log(`You busted with ${this.player.score}!`);
+      } else {
+        this.dealerTurn();
+
+        if (this.dealer.busted) {
+          console.clear();
+          console.log("Dealer busted!");
+        }
       }
-    }
-    this.displayResult();
-    // this.displayGoodbyeMessage();
+      this.displayResult();
+    } while (this.playAgain());
+
+    this.displayGoodbyeMessage();
   }
 
   dealCards() {
@@ -257,6 +271,15 @@ class TwentyOneGame {
 
   isBusted(score) {
     return score > TwentyOneGame.TOTAL_VALUE_LIMIT;
+  }
+
+  resetParticipants() {
+    this.player.hand = [];
+    this.dealer.hand = [];
+    this.player.score = 0;
+    this.dealer.score = 0;
+    this.player.busted = false;
+    this.dealer.busted = false;
   }
 
   getPlayerMove() {
@@ -309,6 +332,7 @@ class TwentyOneGame {
       this.dealer.busted = true;
     } else {
       this.dealer.stay();
+      readline.question("Press Enter!");
     }
   }
 
@@ -345,20 +369,24 @@ Note: An "Ace" has a value of 1 if total values surpass 21; A value of 11 otherw
 
   displayResult() {
     if (this.player.busted) {
-      this.displayScore();
       console.log("Dealer won! you busted a bit too hard...");
+      console.log("");
+      this.displayScore();
     } else if (this.dealer.busted) {
-      this.displayScore();
       console.log("Dealer drank too much water and busted, Player wins!");
-    } else {
+      console.log("");
       this.displayScore();
+    } else {
+      console.clear();
       console.log(this.player.score > this.dealer.score ?
         "Congratz, you win" : "Dealer wins!");
+      console.log("");
+      this.displayScore();
     }
   }
 
   displayScore() {
-    console.clear();
+    // console.clear();
     this.player.showCards();
     console.log("");
     console.log("Player score is:");
@@ -369,6 +397,17 @@ Note: An "Ace" has a value of 1 if total values surpass 21; A value of 11 otherw
     console.log("Dealer score is:");
     console.log(this.dealer.score);
     console.log("");
+  }
+
+  playAgain() {
+    const YES_OR_NO = ["yes", "y", "no", "n"];
+    let answer;
+
+    while (!YES_OR_NO.includes(answer)) {
+      answer = readline.question("Play again? (y/n)").toLowerCase();
+    }
+
+    return answer[0] === "y";
   }
 }
 
