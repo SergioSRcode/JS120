@@ -151,6 +151,11 @@ class Participant {
     // console.log(this.hand);  // remove later
   }
 
+  displayHand() {
+    console.log("");
+    console.log(this.hand.join(", "));
+  }
+
   stay() {
     //STUB
     console.log("stay");
@@ -212,7 +217,7 @@ class TwentyOneGame {
     this.dealCards();
     this.showCards();
     this.playerTurn();
-    this.showCards();  // remove later
+    // this.player.displayHand();
     // this.dealerTurn();
     // this.displayResult();
     // this.displayGoodbyeMessage();
@@ -241,7 +246,7 @@ class TwentyOneGame {
 
     while (!validChoices[0].includes(hitOrStay) &&
            !validChoices[1].includes(hitOrStay)) {
-      hitOrStay = readline.question("Do you 'hit' (h) or 'stay' (s)").toLowerCase();
+      hitOrStay = readline.question("Do you 'hit' (h) or 'stay' (s)\n").toLowerCase();
     }
 
     return hitOrStay;
@@ -252,6 +257,7 @@ class TwentyOneGame {
 
     while (playerMove[0] === "h") {
       this.player.hit(this.player.hand, this.deck);
+      this.player.displayHand();
       playerMove = this.getPlayerMove();
     }
 
@@ -266,11 +272,31 @@ class TwentyOneGame {
     console.clear();
     console.log("Welcome to Twenty-One!");
     console.log("");
+    this.displayRules();
   }
 
   displayGoodbyeMessage() {
     console.clear();
     console.log("Thanks for playing!");
+  }
+
+  displayRules() {
+    console.log(`Welcome to "Twenty One"!`);
+    console.log("=============================");
+    console.log("");
+    console.log(`The goal is to keep the value of your cards below 22 while having a higher score than the dealer!`);
+    console.log("");
+    console.log(`1. Both players have a starting hand of two cards.`);
+    console.log(`2. The dealer always plays with one open card!`);
+    console.log(`3. You start by comparing your cards' values to your oponents card`);
+    console.log(`4. If you think, you can beat your oponents hand, you "stay" => end your turn`);
+    console.log(`5. Otherwise you "hit" => draw a card`);
+    console.log(`6. if your cards' values surpass 21, you "bust" and lose the game. Same goes for the dealer.
+    
+Note: An "Ace" has a value of 1 if total values surpass 21; A value of 11 otherwise.`);
+    console.log("");
+    readline.question("Press Enter to continue!");
+    console.clear();
   }
 
   displayResult() {
