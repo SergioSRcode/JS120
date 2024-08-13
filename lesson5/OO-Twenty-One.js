@@ -144,9 +144,10 @@ class Participant {
     // e.g. Score, Hand, money available?
   }
 
-  hit() {
+  hit(hand, deck) {
     //STUB
-    console.log("hit");
+    let newCard = deck.draw().name;
+    hand.push(newCard);
   }
 
   stay() {
@@ -181,10 +182,6 @@ class Dealer extends Participant {
     // Score? Hand? Deck of cards? Bow tie?
   }
 
-  hide() {
-    //STUB
-  }
-
   reveal() {
     //STUB
   }
@@ -214,6 +211,7 @@ class TwentyOneGame {
     this.dealCards();
     this.showCards();
     this.playerTurn();
+    this.showCards();  // remove later
     // this.dealerTurn();
     // this.displayResult();
     // this.displayGoodbyeMessage();
@@ -249,9 +247,9 @@ class TwentyOneGame {
   }
 
   playerTurn() {
-    //SPIKE
     let playerMove = this.getPlayerMove();
-    if (playerMove[0] === "h") this.player.hit();
+    // while "h" => continue drawing
+    if (playerMove[0] === "h") this.player.hit(this.player.hand, this.deck);
     if (playerMove[0] === "s") this.player.stay();
   }
 
