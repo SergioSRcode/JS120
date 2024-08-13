@@ -146,10 +146,12 @@ class Participant {
 
   hit() {
     //STUB
+    console.log("hit");
   }
 
   stay() {
     //STUB
+    console.log("stay");
   }
 
   isBusted() {
@@ -211,7 +213,7 @@ class TwentyOneGame {
     this.displayWelcomeMessage();
     this.dealCards();
     this.showCards();
-    // this.playerTurn();
+    this.playerTurn();
     // this.dealerTurn();
     // this.displayResult();
     // this.displayGoodbyeMessage();
@@ -236,8 +238,10 @@ class TwentyOneGame {
 
   getPlayerMove() {
     let hitOrStay;
+    let validChoices = Object.values(TwentyOneGame.HIT_OR_STAY);
 
-    while (!TwentyOneGame.HIT_OR_STAY.includes(hitOrStay)) {
+    while (!validChoices[0].includes(hitOrStay) &&
+           !validChoices[1].includes(hitOrStay)) {
       hitOrStay = readline.question("Do you 'hit' (h) or 'stay' (s)").toLowerCase();
     }
 
