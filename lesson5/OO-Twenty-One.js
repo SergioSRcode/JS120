@@ -142,10 +142,11 @@ class Participant {
     hand.push(newCard);
   }
 
-  stay() {  // needs check
-    console.log("");
+  stay() {
+    console.clear();
     console.log(`=> ${this.constructor.name} chose "Stay"!`);
     this.displayHandValue();
+    console.log("");
   }
 
   displayHandValue() {
@@ -315,7 +316,7 @@ class TwentyOneGame {
   }
 
   dealerTurn() {
-    this.dealer.showCards(true);
+    this.dealer.showCards(); //removed true argument
     this.dealer.displayHandValue();
 
     while (this.dealer.score < Dealer.MINIMUM_TOTAL_VALUE) {
