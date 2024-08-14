@@ -230,27 +230,31 @@ class TwentyOneGame {
   start() {
     this.displayWelcomeMessage();
     do {
-      this.deck = new Deck();
-      this.resetParticipants();
-      this.dealCards();
-      this.showCards();
-      this.playerTurn();
-
-      if (this.player.busted) {
-        console.clear();
-        console.log(`You busted with ${this.player.score}!`);
-      } else {
-        this.dealerTurn();
-
-        if (this.dealer.busted) {
-          console.clear();
-          console.log("Dealer busted!");
-        }
-      }
-      this.displayResult();
+      this.play1Game();
     } while (this.playAgain());
 
     this.displayGoodbyeMessage();
+  }
+
+  play1Game() {
+    this.deck = new Deck();
+    this.resetParticipants();
+    this.dealCards();
+    this.showCards();
+    this.playerTurn();
+
+    if (this.player.busted) {
+      console.clear();
+      console.log(`You busted with ${this.player.score}!`);
+    } else {
+      this.dealerTurn();
+
+      if (this.dealer.busted) {
+        console.clear();
+        console.log("Dealer busted!");
+      }
+    }
+    this.displayResult();
   }
 
   dealCards() {
