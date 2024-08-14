@@ -150,6 +150,10 @@ class Dealer extends Participant {
 class TwentyOneGame {
   static HIT_OR_STAY = {hit: ["hit", "h"], stay: ["stay", "s"]};
   static TOTAL_VALUE_LIMIT = 21;
+  static PRESS_ENTER() {
+    console.log("");
+    readline.question("Press Enter to continue!");
+  }
 
   constructor() {
     this.deck = new Deck();
@@ -260,7 +264,7 @@ class TwentyOneGame {
 
     while (this.dealer.score < Dealer.MINIMUM_TOTAL_VALUE) {
       this.dealer.hit(this.dealer.hand, this.deck);
-      readline.question("Press Enter to continue!");
+      TwentyOneGame.PRESS_ENTER();
       this.dealer.calculateScore();
       this.dealer.showCards(true);
       this.dealer.displayHandValue();
@@ -278,8 +282,7 @@ class TwentyOneGame {
 
   displayWelcomeMessage() {
     console.clear();
-    console.log("Welcome to Twenty-One!");
-    console.log("");
+    console.log('\x1b[5m%s\x1b[0m', "Welcome to Twenty-One!");
     this.displayRules();
   }
 
@@ -289,7 +292,6 @@ class TwentyOneGame {
   }
 
   displayRules() {
-    console.log(`Welcome to "Twenty One"!`);
     console.log("=============================");
     console.log("");
     console.log(`The goal is to keep the value of your cards below 22 while
@@ -299,7 +301,7 @@ having a higher score than the dealer!`);
     console.log(`2. The dealer always plays with one open card!`);
     console.log(`3. You start by comparing your cards' values to your oponents card`);
     console.log(`4. If you think, you can beat your oponents hand, you "stay"
- => end your turn`);
+   => end your turn`);
     console.log(`5. Otherwise you "hit" => draw a card`);
     console.log(`6. if your cards' values surpass 21, you "bust" and 
 lose the game. Same goes for the dealer.
@@ -307,16 +309,14 @@ lose the game. Same goes for the dealer.
 Note: An "Ace" has a value of 1 if total values surpass 21; A value of 11 otherwise.`);
     console.log("");
     this.displaySecretClause();
-    readline.question("Press Enter to continue!");
+    TwentyOneGame.PRESS_ENTER();
 
     console.clear();
   }
 
   displaySecretClause() {
-    for (let idx = 0; idx < 3; idx++) {
-      console.log("");
-    }
-    console.log("If you are out of money, you will be asked to leave...");
+    console.log("");
+    console.log('\x1b[90m%s\x1b[0m', "If you are out of money, you will be asked to leave...");
     console.log("");
   }
 
@@ -326,22 +326,22 @@ Note: An "Ace" has a value of 1 if total values surpass 21; A value of 11 otherw
 
   displayResult() {
     if (this.player.busted) {
-      console.log("Dealer won! you busted a bit too hard...");
+      console.log('\x1b[31m%s\x1b[0m', "Dealer won! you busted a bit too hard...");
       console.log("");
       this.displayScore();
     } else if (this.dealer.busted) {
-      console.log("Dealer drank too much water and busted, Player wins!");
+      console.log('\x1b[32m%s\x1b[0m', "Dealer drank too much water and busted, Player wins!");
       console.log("");
       this.displayScore();
     } else if (this.dealer.score === this.player.score) {
       console.clear();
-      console.log("Wow, a tie!");
+      console.log('\x1b[33m%s\x1b[0m', "Wow, a tie!");
       console.log("");
       this.displayScore();
     } else {
       console.clear();
-      console.log(this.player.score > this.dealer.score ?
-        "Congratz, you win" : "Dealer wins!");
+      console.log('\x1b[36m%s\x1b[0m', this.player.score > this.dealer.score ?
+        "Congratz, you win!" : "Dealer wins!");
       console.log("");
       this.displayScore();
     }
