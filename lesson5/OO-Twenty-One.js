@@ -7,6 +7,10 @@ class Card {
     this.suit = suit;
     this.name = suit + " " + rank;
   }
+
+  getName() {
+    return this.name;
+  }
 }
 
 class Deck {
@@ -59,7 +63,7 @@ class Participant {
   }
 
   hit(hand, deck) {
-    let newCard = deck.draw().name;
+    let newCard = deck.draw().getName();
     hand.push(newCard);
   }
 
@@ -194,8 +198,8 @@ class TwentyOneGame {
 
   dealCards() {
     while (this.player.hand.length < 2) {
-      this.player.hand.push(this.deck.draw().name);
-      this.dealer.hand.push(this.deck.draw().name);
+      this.player.hand.push(this.deck.draw().getName());
+      this.dealer.hand.push(this.deck.draw().getName());
     }
   }
 
