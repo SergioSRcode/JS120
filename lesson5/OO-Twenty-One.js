@@ -179,6 +179,7 @@ class Participant {
 class Player extends Participant {
   constructor() {
     super();
+    this.money = 5;
   }
 
   showCards(clear) {
@@ -381,6 +382,10 @@ Note: An "Ace" has a value of 1 if total values surpass 21; A value of 11 otherw
       console.log("Dealer drank too much water and busted, Player wins!");
       console.log("");
       this.displayScore();
+    } else if (this.dealer.score === this.player.score) {
+      console.log("Wow, a tie!");
+      console.log("");
+      this.displayScore();
     } else {
       console.clear();
       console.log(this.player.score > this.dealer.score ?
@@ -413,6 +418,10 @@ Note: An "Ace" has a value of 1 if total values surpass 21; A value of 11 otherw
     }
 
     return answer[0] === "y";
+  }
+
+  calculateMoney() {
+
   }
 }
 
