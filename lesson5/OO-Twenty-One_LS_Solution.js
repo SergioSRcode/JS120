@@ -1,220 +1,392 @@
-/* eslint-disable max-len */
-/* Description
-
-Twenty-One is a card game with a dealer and a player.
-The participants try to get as close to 21 points as possible without going over.
-The game starts by dealing cards from a 52-card deck consisting of cards from 4 suits of 13 ranks each.
-Both participants receive two cards.
- - The dealer hides one of his cards (places it face-down) so that the player can't see what it is.
- - The player can see both of her cards.
-
-The player takes the first turn, and can hit or stay.
- - If the player hits, she gets another card, and again has the opportunity to hit (get another card) or stay.
- - If the player goes over 21 points, she busts.
- - If the player stays, the dealer plays next.
-
-If the player didn't bust, it's now the dealer's turn.
- - The dealer reveals his face-down card.
- - If the dealer's total points are less than 17, he must hit and receive another card.
- - If the dealer goes over 21 points, he busts.
- - If the dealer has 17 points or more, he must stay.
-
-Results of the game are determined.
-
-
-Nouns: game, player, dealer, participant, deck, card, score, points
-
-Verbs: start, deal (cards), hit, stay, win, lose, tie, bust, hide, reveal (face down), draw (card), determine (results)
-
-Game (n)
- - start (v)
- - determine results (v)
-
-Deck (n)
- - deal (v) (should this be here or in Dealer?)
-
-Card (n)
-
-Participant (n)
- - hit (v)
-  - draw card (v)
- - stay (v)
- - bust (state)
- - Score (n, state)
-
-Player extends Participant (n)
-
-Dealer extends Participant (n)
- - reveal (v) -> facedown card (should this be here?)
-
-
-RR:
-Welcome the player to the game, and say good bye when they quit.
-
-Each time the player has an opportunity to hit or stay:
-
-- Display the computer's hand; one card should remain hidden.
-- Display the player's hand and her point total.
-
-Dealers turn:
-
-- The dealer doesn't play at all if the player busts.
-- Display the dealer's hand, including the hidden card, and report his point total.
-- Redisplay the dealer's hand and point total and each time he hits.
-- Display the results when the dealer stays.
-
-After each game is over, ask the player if they want to play again. Start a new game if they say yes, else end the game.
-
-When the program starts, give the player 5 dollars with which to bet.
-Deduct 1 dollar each time she loses, and add 1 dollar each time she wins.
-The program should quit when she is broke (0 dollars) or rich (has a total of 10 dollars).
-
-Be prepared to run out of cards.
-You can either create a new deck for each game,
-or keep track of how many cards remain and create a new deck as needed.
-*/
+/* eslint-disable indent */
+const readline = require("readline-sync");
+const shuffle = require("shuffle-array");
 
 class Card {
-  constructor() {
-    //STUB
-    // What state is needed for a card?
-    // Rank? Suit? Points?
+  static SUITS = ["Clubs", "Diamonds", "Hearts", "Spades"];
+  static RANKS = ["2", "3", "4", "5", "6", "7", "8", "9", "10",
+                  "Jack", "Queen", "King", "Ace"];
+
+  constructor(suit, rank) {
+    this.suit = suit;
+    this.rank = rank;
+    this.hidden = false;
+  }
+
+  toString() {
+    if (this.isHidden()) return "Hidden";
+    return `${this.getRank()} of ${this.getSuit()}`;
+  }
+
+  getRank() {
+    return this.rank;
+  }
+
+  getSuit() {
+    return this.suit;
+  }
+
+  isAce() {
+    return this.getRank() === "Ace";
+  }
+
+  isKing() {
+    return this.getRank() === "King";
+  }
+
+  isQueen() {
+    return this.getRank() === "Queen";
+  }
+
+  isJack() {
+    return this.getRank() === "Jack";
+  }
+
+  isFaceCard() {
+    return this.isKing() || this.isQueen() || this.isJack();
+  }
+
+  hide() {
+    this.hidden = true;
+  }
+
+  reveal() {
+    this.hidden = false;
+  }
+
+  isHidden() {
+    return this.hidden;
   }
 }
 
 class Deck {
   constructor() {
-    //STUB
-    // what state is needed?
-    // 52 cards?
-    // Data structure to keep track of cards:
-    // Array, Obj, or sth. else?
+    this.cards = [];
+    Card.SUITS.forEach(suit => {
+      Card.RANKS.forEach(rank => {
+        this.cards.push(new Card(suit, rank));
+      });
+    });
+
+    this.shuffleCards();
   }
 
-  deal() {
-    //STUB
-    // does the Dealer or the Deck deal?
+  // it may be useful to shuffle the deck at any time
+  shuffleCards() {
+    shuffle(this.cards);
+  }
+
+  dealCardFaceUp() {
+    return this.cards.pop();
+  }
+
+  dealCardFaceDown() {
+    let card = this.dealCardFaceUp();
+    card.hide();
+    return card;
   }
 }
 
-class Participant {
+let Hand = {
+  addToHand(newCard) {
+    this.cards.push(newCard);
+  },
+
+  resetHand() {
+    this.cards = [];
+  },
+
+  showHand(caption) {
+    console.log(caption);
+    console.log("");
+
+    this.cards.forEach(card => console.log(`  ${card}`));
+    console.log("");
+  },
+
+  getCards() {
+    return this.cards;
+  },
+
+  revealAllCards() {
+    this.cards.forEach(card => card.reveal());
+  },
+
+  numberOfCards() {
+    return this.cards.length;
+  },
+};
+
+class Player {
+  static INITIAL_PURSE = 5;
+  static WINNING_PURSE = 2 * Player.INITIAL_PURSE;
+
   constructor() {
-    //STUB
-    // state that both participants share?
-    // e.g. Score, Hand, money available?
+    this.money = Player.INITIAL_PURSE;
+    this.resetHand();
+  }
+
+  winBet() {
+    this.money += 1;
+  }
+
+  loseBet() {
+    this.money -= 1;
+  }
+
+  isBroke() {
+    return this.money <= 0;
+  }
+
+  isRich() {
+    return this.money >= Player.WINNING_PURSE;
+  }
+
+  showPurse() {
+    console.log(`You have $${this.money}`);
+    console.log("");
   }
 }
 
-class Player extends Participant {
+class Dealer {
   constructor() {
-    super();
-    //STUB
-    // state that only belongs to Player
-  }
-
-  hit() {
-    //STUB
-  }
-
-  stay() {
-    //STUB
-  }
-
-  isBusted() {
-    //STUB
-  }
-
-  score() {
-    //STUB
+    this.resetHand();
   }
 }
 
-class Dealer extends Participant {
-  // Very similar to a Player; do we need this?
-
-  constructor() {
-    super();
-    //STUB
-    // What sort of state does a dealer need?
-    // Score? Hand? Deck of cards? Bow tie?
-  }
-
-  hit() {
-    //STUB
-  }
-
-  stay() {
-    //STUB
-  }
-
-  isBusted() {
-    //STUB
-  }
-
-  score() {
-    //STUB
-  }
-
-  hide() {
-    //STUB
-  }
-
-  reveal() {
-    //STUB
-  }
-
-  deal() {
-    //STUB
-    // does the dealer or the deck deal?
-  }
-}
+// Hand is a "mix-in"; we add its methods to the Player and Dealer classes.
+// This is an alternative to inheritance when inheritance isn't appropriate
+Object.assign(Player.prototype, Hand);
+Object.assign(Dealer.prototype, Hand);
 
 class TwentyOneGame {
+  static TARGET_SCORE = 21;
+  static DEALER_MUST_STAY_SCORE = this.TARGET_SCORE - 4;
+  static HIT = 'h';
+  static STAY = 's';
+
   constructor() {
-    //STUB
-    // state?
-    // e.g. a Deck? Two participants?
+    this.player = new Player();
+    this.dealer = new Dealer();
   }
 
   start() {
-    //SPIKE
     this.displayWelcomeMessage();
-    this.dealCards();
-    this.showCards();
-    this.playerTurn();
-    this.dealerTurn();
-    this.displayResult();
+
+    while (true) {
+      this.playOneGame();
+      if (this.player.isBroke() || this.player.isRich()) break;
+      if (!this.playAgain()) break;
+    }
+
+    if (this.player.isBroke()) {
+      console.log("You're broke!");
+    } else if (this.player.isRich()) {
+      console.log("You're rich!");
+    }
+
     this.displayGoodbyeMessage();
   }
 
-  dealCards() {
-    //STUB
+  playOneGame() {
+    this.dealCards();
+    this.showCards();
+    this.player.showPurse();
+    this.playerTurn();
+
+    if (!this.isBusted(this.player)) {
+      this.dealerTurn();
+    }
+
+    console.clear();
+    this.showCards();
+    this.displayResult();
+
+    this.updatePurse();
+    this.player.showPurse();
   }
 
-  showCards() {
-    //STUB
+  playAgain() {
+    let answer;
+
+    while (true) {
+      answer = readline.question("Play again (y/n)? ").toLowerCase();
+
+      if (["y", "n"].includes(answer)) break;
+
+      console.log("Sorry, that's not a valid choice.");
+      console.log("");
+    }
+
+    console.clear();
+    return answer === "y";
+  }
+
+  hit(hand) {
+    hand.addToHand(this.deck.dealCardFaceUp());
+    if (this.isBusted(hand)) return;
+
+    console.clear();
+    this.showCards();
   }
 
   playerTurn() {
-    //STUB
+    while (this.hitOrStay() === TwentyOneGame.HIT) {
+      this.hit(this.player);
+      if (this.isBusted(this.player)) break;
+    }
+  }
+
+  dealerContinue() {
+    readline.question("Press Return to continue...");
   }
 
   dealerTurn() {
-    //STUB
+    this.dealer.revealAllCards();
+
+    console.clear();
+    this.showCards();
+
+    while (true) {
+      let score = this.computeScoreFor(this.dealer);
+      if (score >= TwentyOneGame.DEALER_MUST_STAY_SCORE) break;
+      this.dealerContinue();
+      this.hit(this.dealer);
+    }
+  }
+
+  dealCards() {
+    this.deck = new Deck();
+    this.player.resetHand();
+    this.dealer.resetHand();
+
+    this.player.addToHand(this.deck.dealCardFaceUp());
+    this.dealer.addToHand(this.deck.dealCardFaceUp());
+    this.player.addToHand(this.deck.dealCardFaceUp());
+    this.dealer.addToHand(this.deck.dealCardFaceDown());
+  }
+
+  showCards() {
+    this.dealer.showHand("Dealer's Cards");
+    this.showScoreFor(this.dealer);
+
+    this.player.showHand("Your Cards");
+    this.showScoreFor(this.player);
   }
 
   displayWelcomeMessage() {
-    //STUB
+    console.clear();
+    console.log("Welcome to 21!");
+    console.log("");
   }
 
   displayGoodbyeMessage() {
-    //STUB
+    console.log("Thanks for playing 21! Goodbye!");
+  }
+
+  whoWon() {
+    if (this.isBusted(this.player)) {
+      return this.dealer;
+    } else if (this.isBusted(this.dealer)) {
+      return this.player;
+    } else {
+      let playerScore = this.computeScoreFor(this.player);
+      let dealerScore = this.computeScoreFor(this.dealer);
+
+      if (playerScore > dealerScore) {
+        return this.player;
+      } else if (playerScore < dealerScore) {
+        return this.dealer;
+      } else {
+        return null; // tie game
+      }
+    }
   }
 
   displayResult() {
-    //STUB
+    if (this.isBusted(this.player)) {
+      console.log("You busted! Dealer wins.");
+    } else if (this.isBusted(this.dealer)) {
+      console.log("Dealer busted! You win.");
+    } else {
+      let playerScore = this.computeScoreFor(this.player);
+      let dealerScore = this.computeScoreFor(this.dealer);
+
+      if (playerScore > dealerScore) {
+        console.log("You win!");
+      } else if (playerScore < dealerScore) {
+        console.log("Dealer wins!");
+      } else {
+        console.log("Tie game.");
+      }
+    }
+
+    console.log("");
+  }
+
+  hitOrStay() {
+    let answer;
+
+    while (true) {
+      answer = readline.question("Hit or Stay (h/s)? ").toLowerCase();
+
+      if ([TwentyOneGame.HIT, TwentyOneGame.STAY].includes(answer)) break;
+
+      console.log("Sorry, that's not a valid choice.");
+      console.log("");
+    }
+
+    return answer;
+  }
+
+  computeScoreFor(hand) {
+    let cards = hand.getCards();
+    let score = cards.reduce((total, card) => total + this.valueOf(card), 0);
+
+    cards.filter(card => card.isAce() && !card.isHidden())
+         .forEach(() => {
+           if (score > TwentyOneGame.TARGET_SCORE) {
+             score -= 10;
+           }
+         });
+
+    return score;
+  }
+
+  isBusted(hand) {
+    return this.computeScoreFor(hand) > TwentyOneGame.TARGET_SCORE;
+  }
+
+  updatePurse() {
+    switch (this.whoWon()) {
+      case this.player:
+        this.player.winBet();
+        break;
+      case this.dealer:
+        this.player.loseBet();
+        break;
+      default:
+        break;
+    }
+  }
+
+  valueOf(card) {
+    if (card.isHidden()) {
+      return 0;
+    } else if (card.isAce()) {
+      return 11;
+    } else if (card.isFaceCard()) {
+      return 10;
+    } else {
+      return parseInt(card.getRank(), 10);
+    }
+  }
+
+  showScoreFor(hand) {
+    console.log(`  Points: ${this.computeScoreFor(hand)}`);
+    console.log("");
   }
 }
 
-let twenty1Game = new TwentyOneGame();
-twenty1Game.start();
+let game = new TwentyOneGame();
+game.start();
