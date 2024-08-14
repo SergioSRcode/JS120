@@ -82,7 +82,6 @@ class Card {
     this.rank = rank;
     this.suit = suit;
     this.name = suit + " " + rank;
-    // this.points = null;  // maybe for participants?
   }
 }
 
@@ -132,9 +131,7 @@ class Participant {
     this.hand = [];
     this.score = 0;
     this.busted = false;
-    //STUB
-    // state that both participants share?
-    // e.g. Score, Hand, money available?
+    this.winner = false;
   }
 
   hit(hand, deck) {
@@ -179,13 +176,21 @@ class Participant {
 class Player extends Participant {
   constructor() {
     super();
-    this.money = 5;
+    this.money = 2;
   }
 
   showCards(clear) {
     if (clear) console.clear();
     console.log(`Player cards: 
   ${this.hand.join(", ")}`);
+  }
+
+  isBroke() {
+    return this.money === 0;
+  }
+
+  isRich() {
+    return this.money === 10;
   }
 }
 
@@ -196,14 +201,14 @@ class Dealer extends Participant {
     super();
   }
 
-  showCards(clear) {
+  showCards(clear) {  // if a truthy argument is provided, clears console
     if (clear) console.clear();
     console.log(`Dealer cards: 
   ${this.hand.join(", ")}`);
   }
 
   hit(hand, deck) {
-    console.log("=> Dealer chose 'hit!");
+    console.log('=> Dealer chose "hit!"');
     console.log("");
     let newCard = deck.draw().name;
     hand.push(newCard);
@@ -232,6 +237,7 @@ class TwentyOneGame {
     this.displayWelcomeMessage();
     do {
       this.play1Game();
+      if (this.throwOut()) break;
     } while (this.playAgain());
 
     this.displayGoodbyeMessage();
@@ -267,6 +273,8 @@ class TwentyOneGame {
 
   showCards() {
     console.clear();
+    this.displayMoney();
+    console.log("");
     console.log(`Dealer cards: 
   ${this.dealer.hand[0]}, N.N.`);
     console.log("");
@@ -286,6 +294,8 @@ class TwentyOneGame {
     this.dealer.score = 0;
     this.player.busted = false;
     this.dealer.busted = false;
+    this.player.winner = false;
+    this.dealer.winner = false;
   }
 
   getPlayerMove() {
@@ -321,7 +331,7 @@ class TwentyOneGame {
   }
 
   dealerTurn() {
-    this.dealer.showCards(); //removed true argument
+    this.dealer.showCards();
     this.dealer.displayHandValue();
 
     while (this.dealer.score < Dealer.MINIMUM_TOTAL_VALUE) {
@@ -358,19 +368,36 @@ class TwentyOneGame {
     console.log(`Welcome to "Twenty One"!`);
     console.log("=============================");
     console.log("");
-    console.log(`The goal is to keep the value of your cards below 22 while having a higher score than the dealer!`);
+    console.log(`The goal is to keep the value of your cards below 22 while
+having a higher score than the dealer!`);
     console.log("");
     console.log(`1. Both players have a starting hand of two cards.`);
     console.log(`2. The dealer always plays with one open card!`);
     console.log(`3. You start by comparing your cards' values to your oponents card`);
-    console.log(`4. If you think, you can beat your oponents hand, you "stay" => end your turn`);
+    console.log(`4. If you think, you can beat your oponents hand, you "stay"
+ => end your turn`);
     console.log(`5. Otherwise you "hit" => draw a card`);
-    console.log(`6. if your cards' values surpass 21, you "bust" and lose the game. Same goes for the dealer.
+    console.log(`6. if your cards' values surpass 21, you "bust" and 
+lose the game. Same goes for the dealer.
     
 Note: An "Ace" has a value of 1 if total values surpass 21; A value of 11 otherwise.`);
     console.log("");
+    this.displaySecretClause();
     readline.question("Press Enter to continue!");
+
     console.clear();
+  }
+
+  displaySecretClause() {
+    for (let idx = 0; idx < 3; idx++) {
+      console.log("");
+    }
+    console.log("If you are out of money, you will be asked to leave...");
+    console.log("");
+  }
+
+  displayMoney() {
+    console.log(`Current Money: ${this.player.money}$`);
   }
 
   displayResult() {
@@ -383,6 +410,7 @@ Note: An "Ace" has a value of 1 if total values surpass 21; A value of 11 otherw
       console.log("");
       this.displayScore();
     } else if (this.dealer.score === this.player.score) {
+      console.clear();
       console.log("Wow, a tie!");
       console.log("");
       this.displayScore();
@@ -396,7 +424,6 @@ Note: An "Ace" has a value of 1 if total values surpass 21; A value of 11 otherw
   }
 
   displayScore() {
-    // console.clear();
     this.player.showCards();
     console.log("");
     console.log("Player score is:");
@@ -420,8 +447,45 @@ Note: An "Ace" has a value of 1 if total values surpass 21; A value of 11 otherw
     return answer[0] === "y";
   }
 
-  calculateMoney() {
+  calculateResult() {
+    let playerScoreIsHigher = this.dealer.score < this.player.score;
+    let dealerScoreIsHigher = this.player.score < this.dealer.score;
 
+    if (this.player.busted) {
+      this.dealer.winner = true;
+    } else if (this.dealer.busted) {
+      this.player.winner = true;
+    } else if (playerScoreIsHigher) {
+      this.player.winner = true;
+    } else if (dealerScoreIsHigher) {
+      this.dealer.winner = true;
+    }
+  }
+
+  calculateMoney() {
+    this.calculateResult();
+
+    if (this.player.winner) this.player.money += 1;
+    if (this.dealer.winner) this.player.money -= 1;
+  }
+
+  throwOut() {
+    this.calculateMoney();
+    let playerIsBroke = this.player.isBroke();
+    let playerIsRich = this.player.isRich();
+
+    if (playerIsBroke) {
+      console.log("Oh, out of money, aren't we? Security! Get them outta here!");
+      console.log("");
+      readline.question("Run by pressing Enter!!");
+    }
+    if (playerIsRich) {
+      console.log("SECURITY! They must be cheating, throw 'em out!");
+      console.log("");
+      readline.question("Run by pressing Enter!!");
+    }
+
+    return playerIsBroke || playerIsRich;
   }
 }
 
