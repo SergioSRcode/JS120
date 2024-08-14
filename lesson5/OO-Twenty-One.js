@@ -409,7 +409,7 @@ Note: An "Ace" has a value of 1 if total values surpass 21; A value of 11 otherw
     let answer;
 
     while (!YES_OR_NO.includes(answer)) {
-      answer = readline.question("Play again? (y/n)").toLowerCase();
+      answer = readline.question("Play again? (y/n)\n").toLowerCase();
     }
 
     return answer[0] === "y";
