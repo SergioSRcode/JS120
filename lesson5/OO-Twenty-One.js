@@ -100,7 +100,7 @@ class Participant {
 class Player extends Participant {
   constructor() {
     super();
-    this.money = 2;
+    this.money = 5;
   }
 
   showCards(clear) {
