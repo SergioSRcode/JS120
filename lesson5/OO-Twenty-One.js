@@ -314,7 +314,7 @@ having a higher score than the dealer!`);
    => end your turn`);
     console.log(`5. Otherwise you "hit" => draw a card`);
     console.log(`6. if your cards' values surpass 21, you "bust" and 
-lose the game. Same goes for the dealer.
+   lose the game. Same goes for the dealer.
     
 Note: An "Ace" has a value of 1 if total values surpass 21; A value of 11 otherwise.`);
     console.log("");
