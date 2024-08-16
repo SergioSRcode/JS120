@@ -92,7 +92,12 @@ class Participant {
     let acesInHand = handValues.filter(val => val === 11).length;
     let rawScore = handValues.reduce((acc, num) => acc + num, 0);
 
-    while (acesInHand > 1) {
+    // while (acesInHand > 1) {
+    //   rawScore -= 10;
+    //   acesInHand -= 1;
+    // }
+
+    while (rawScore > 21 && acesInHand > 0) {
       rawScore -= 10;
       acesInHand -= 1;
     }
