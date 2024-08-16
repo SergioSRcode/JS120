@@ -237,6 +237,12 @@ class TwentyOneGame {
     while (!validChoices[0].includes(hitOrStay) &&
            !validChoices[1].includes(hitOrStay)) {
       hitOrStay = readline.question("\nDo you 'hit' (h) or 'stay' (s)\n").toLowerCase();
+
+      if (!validChoices[0].includes(hitOrStay) &&
+      !validChoices[1].includes(hitOrStay)) {
+        this.showCards();
+        this.player.displayHandValue();
+      }
     }
 
     return hitOrStay;
@@ -370,6 +376,7 @@ Note: An "Ace" has a value of 1 if total values surpass 21; A value of 11 otherw
 
     while (!YES_OR_NO.includes(answer)) {
       answer = readline.question("Play again? (y/n)\n").toLowerCase();
+      if (!YES_OR_NO.includes(answer)) console.clear();
     }
 
     return answer[0] === "y";
